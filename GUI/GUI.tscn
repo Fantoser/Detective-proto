@@ -1,0 +1,93 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://GUI/Tough system.gd" type="Script" id=1]
+[ext_resource path="res://GUI/Butt.tscn" type="PackedScene" id=2]
+[ext_resource path="res://GUI/FollowButt.gd" type="Script" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+
+extents = Vector2( 32.0053, 31.9216 )
+
+[sub_resource type="StyleBoxFlat" id=2]
+
+bg_color = Color( 0.621094, 0.451263, 0.451263, 1 )
+
+[sub_resource type="RectangleShape2D" id=4]
+
+extents = Vector2( 33.3413, 32.2846 )
+
+[node name="GUI" type="Node"]
+script = ExtResource( 1 )
+Thebutt = ExtResource( 2 )
+
+[node name="ButtonPos" type="Position2D" parent="."]
+position = Vector2( 88.4885, 221.555 )
+
+[node name="labelBucket" type="Container" parent="."]
+margin_left = 75.0
+margin_top = 300.0
+margin_right = 939.0
+margin_bottom = 444.0
+
+[node name="LabelPos" type="Position2D" parent="labelBucket"]
+position = Vector2( 23.7554, 28.0879 )
+
+[node name="wordlist" type="ItemList" parent="labelBucket"]
+margin_left = -213.18
+margin_top = 4.0
+margin_right = -106.1
+margin_bottom = 23.99
+size_flags_horizontal = 0
+size_flags_vertical = 0
+allow_reselect = true
+max_text_lines = 15
+
+[node name="Grid" type="GridContainer" parent="."]
+margin_left = 78.0
+margin_top = 104.0
+margin_right = 118.0
+margin_bottom = 144.0
+columns = 10
+
+[node name="WordDrop" type="Area2D" parent="."]
+position = Vector2( 224.036, 154.909 )
+scale = Vector2( 1.46583, 0.551744 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WordDrop"]
+shape = SubResource( 1 )
+
+[node name="ColorRect" type="ColorRect" parent="WordDrop"]
+margin_left = -32.0
+margin_top = -33.0
+margin_right = 32.0
+margin_bottom = 31.0
+
+[node name="FollowButt" type="Button" parent="."]
+margin_left = -99.0
+margin_top = 124.0
+margin_right = -87.0
+margin_bottom = 149.0
+custom_styles/normal = SubResource( 2 )
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="FollowArea" type="Area2D" parent="FollowButt"]
+position = Vector2( 5.97427, 12.5049 )
+scale = Vector2( 0.183946, 0.385926 )
+z_as_relative = false
+
+[node name="FollowCollision" type="CollisionShape2D" parent="FollowButt/FollowArea"]
+z_as_relative = false
+shape = SubResource( 4 )
+
+[node name="Layer_1" type="CanvasLayer" parent="."]
+layer = -1
+
+[connection signal="item_selected" from="labelBucket/wordlist" to="." method="_on_wordlist_item_selected"]
+[connection signal="area_entered" from="FollowButt/FollowArea" to="FollowButt" method="_on_Area2D_area_entered"]
+[connection signal="area_exited" from="FollowButt/FollowArea" to="FollowButt" method="_on_Area2D_area_exited"]
