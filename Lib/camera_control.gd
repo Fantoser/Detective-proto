@@ -18,6 +18,7 @@ export var rotate_privot = false
 export var collisions = true setget set_collisions
 export (int, 0, 360) var yaw_limit = 360
 export (int, 0, 360) var pitch_limit = 360
+export var Pheight = 2
 
 # Movement settings
 export var movement = true
@@ -147,7 +148,7 @@ func _update_mouselook():
 	_total_pitch += _pitch
 
 	if privot:
-		var target = privot.get_translation()
+		var target = privot.get_translation() + Vector3(0, Pheight, 0)
 		var offset = get_translation().distance_to(target)
 
 		set_translation(target)
@@ -162,7 +163,7 @@ func _update_mouselook():
 		rotate_object_local(Vector3(1,0,0), deg2rad(-_pitch))
 
 func _update_distance():
-	var t = privot.get_translation()
+	var t = privot.get_translation() + Vector3(0, Pheight, 0)
 	t.z -= distance
 	set_translation(t)
 

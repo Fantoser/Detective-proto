@@ -11,7 +11,8 @@ func _ready():
 	# Initialization here
 	pass
 
-#func _process(delta):
+func _process(delta):
 #	# Called every frame. Delta is time since last frame.
 #	# Update game logic here.
 #	$Label.text = "player basis: " + str(rad2deg(player.get_rotation().y)) + "\ndir: " + str(player.dir) + "\nvelocity: " + str(player.velocity.y) + "\nhvel: " + str(player.hvel) + "\ncam basis: " + str(cam.get_global_transform().basis[0])
+	$Label.text = str($Player.get_translation())

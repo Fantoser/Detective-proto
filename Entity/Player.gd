@@ -113,10 +113,5 @@ func _physics_process(delta):
 ###	CAST SOME RAY ###
 
 func _process(delta):
-	if(ray.is_enabled() and ray.is_colliding()):
+	if ray.is_colliding():
 		var rayObject = ray.get_collider()
-		print(rayObject.get_name())
-		if(rayObject.get_name() == "StaticBody"):
-			rayObject.get_parent().hide()
-	
-	
