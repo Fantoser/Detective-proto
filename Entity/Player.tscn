@@ -3,7 +3,6 @@
 [ext_resource path="res://assets/Cube_001.mesh" type="ArrayMesh" id=1]
 
 [sub_resource type="CapsuleShape" id=1]
-
 radius = 0.654955
 height = 0.826833
 

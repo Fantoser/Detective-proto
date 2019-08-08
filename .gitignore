@@ -3,6 +3,18 @@
 
 assets/
 
+levels/
+
+addons/
+
+Cases/
+
 Rules of Knox\.txt
 
 Rules of Van Dine\.txt
+
+.import/
+
+export.cfg
+
+export_presets.cfg

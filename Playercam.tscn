@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://Lib/camera_control.gd" type="Script" id=1]
+
+[node name="Playercam" type="Camera"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 7 )
+script = ExtResource( 1 )
+privot = NodePath("../Luke")
+collisions = false
+pitch_limit = 0
+movement = false
+
+[node name="Ray" type="RayCast" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.0182295, 0 )
+enabled = true
+cast_to = Vector3( 0, 0, -4.38 )
+collision_mask = 2
+collide_with_areas = true
+
