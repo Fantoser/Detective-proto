@@ -4,6 +4,8 @@ extends Node
 # var a = 2
 # var b = "text"
 var ID = null
+onready var root = get_parent().get_parent()
+onready var progress = PROGRESS
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -14,7 +16,10 @@ func _process(delta):
 	
 	if Input.is_action_just_pressed("mouse_left"):
 		if _clicked() == true:
-			get_parent().get_parent()._remove_text(ID)
+			if root.clue_selected != 0:
+				root._change_text(ID, progress.selected_clue["name"], progress.selected_clue["list"])
+			else:
+				root._remove_text(ID)
 
 func _clicked():
 	var mouseX = get_viewport().get_mouse_position()[0]

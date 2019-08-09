@@ -1,0 +1,33 @@
+{
+    "Robot":{
+        "1":[
+            {
+                "type":"walk_to",
+                "position":[8.386, 0, -0.091],
+                "animation":"Robot_walk-loop",
+                "trigger":"on_position"
+            },
+            {
+                "type":"walk_to",
+                "position":[-7.465, 0, 8.493],
+                "animation":"Robot_walk-loop",
+                "trigger":"on_position",
+                "loop_from":0
+            }
+        ],
+        "2":[
+            {
+                "type":"animation",
+                "animation":"Robot_Punch",
+                "trigger":"dialogue"
+            }
+        ],
+        "3":[
+            {
+                "type":"animation",
+                "animation":"Robot_Dance-loop"
+            }
+        ]
+
+    }
+}

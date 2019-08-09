@@ -1,93 +1,270 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://GUI/Tough system.gd" type="Script" id=1]
-[ext_resource path="res://GUI/Butt.tscn" type="PackedScene" id=2]
-[ext_resource path="res://GUI/FollowButt.gd" type="Script" id=3]
+[ext_resource path="res://GUI/gui.gd" type="Script" id=1]
+[ext_resource path="res://GUI/Open dialogue/Dialogue.tscn" type="PackedScene" id=2]
+[ext_resource path="res://GUI/Thought system/Thought system.tscn" type="PackedScene" id=3]
+[ext_resource path="res://GUI/ClueList.gd" type="Script" id=4]
+[ext_resource path="res://GUI/Present list.gd" type="Script" id=5]
+[ext_resource path="res://assets/Espella mugshot.png" type="Texture" id=6]
+[ext_resource path="res://assets/Brentilda mugshot.png" type="Texture" id=7]
+[ext_resource path="res://assets/Hajime mugshot.png" type="Texture" id=8]
 
-[sub_resource type="RectangleShape2D" id=1]
-
-extents = Vector2( 32.0053, 31.9216 )
-
-[sub_resource type="StyleBoxFlat" id=2]
-
-bg_color = Color( 0.621094, 0.451263, 0.451263, 1 )
-
-[sub_resource type="RectangleShape2D" id=4]
-
-extents = Vector2( 33.3413, 32.2846 )
-
-[node name="GUI" type="Node"]
+[node name="GUI" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -2.56201
+margin_top = -2.16479
+margin_right = -2.56201
+margin_bottom = -2.16479
 script = ExtResource( 1 )
-Thebutt = ExtResource( 2 )
 
-[node name="ButtonPos" type="Position2D" parent="."]
-position = Vector2( 88.4885, 221.555 )
+[node name="Dialogue" parent="." instance=ExtResource( 2 )]
 
-[node name="labelBucket" type="Container" parent="."]
-margin_left = 75.0
-margin_top = 300.0
-margin_right = 939.0
-margin_bottom = 444.0
+[node name="Menu" type="Control" parent="."]
+editor/display_folded = true
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
 
-[node name="LabelPos" type="Position2D" parent="labelBucket"]
-position = Vector2( 23.7554, 28.0879 )
+[node name="ColorRect2" type="ColorRect" parent="Menu"]
+margin_left = 206.0
+margin_top = 174.679
+margin_right = 816.0
+margin_bottom = 405.679
+color = Color( 0.109804, 0.105882, 0.12549, 1 )
 
-[node name="wordlist" type="ItemList" parent="labelBucket"]
-margin_left = -213.18
-margin_top = 4.0
-margin_right = -106.1
-margin_bottom = 23.99
-size_flags_horizontal = 0
-size_flags_vertical = 0
-allow_reselect = true
-max_text_lines = 15
+[node name="Cluesbutt" type="Button" parent="Menu"]
+margin_left = 232.0
+margin_top = 194.679
+margin_right = 793.0
+margin_bottom = 240.679
+rect_min_size = Vector2( 0, 46 )
+focus_mode = 0
+enabled_focus_mode = 0
+text = "CLUES"
 
-[node name="Grid" type="GridContainer" parent="."]
-margin_left = 78.0
-margin_top = 104.0
-margin_right = 118.0
-margin_bottom = 144.0
-columns = 10
+[node name="Questionsbutt" type="Button" parent="Menu"]
+margin_left = 232.0
+margin_top = 263.68
+margin_right = 793.0
+margin_bottom = 309.68
+rect_min_size = Vector2( 0, 46 )
+focus_mode = 0
+enabled_focus_mode = 0
+text = "QUESTIONS"
 
-[node name="WordDrop" type="Area2D" parent="."]
-position = Vector2( 224.036, 154.909 )
-scale = Vector2( 1.46583, 0.551744 )
+[node name="Indictbutt" type="Button" parent="Menu"]
+margin_left = 232.0
+margin_top = 333.769
+margin_right = 793.0
+margin_bottom = 379.769
+rect_min_size = Vector2( 0, 46 )
+focus_mode = 0
+enabled_focus_mode = 0
+text = "INDICT"
+
+[node name="Thought system" parent="." instance=ExtResource( 3 )]
+visible = false
+
+[node name="Cluelist" type="Control" parent="."]
+editor/display_folded = true
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+script = ExtResource( 4 )
+
+[node name="ColorRect" type="ColorRect" parent="Cluelist"]
+margin_left = 140.0
+margin_top = 67.0
+margin_right = 881.0
+margin_bottom = 530.0
+color = Color( 0.109804, 0.105882, 0.12549, 1 )
+
+[node name="ItemList" type="ItemList" parent="Cluelist"]
+margin_left = 161.0
+margin_top = 93.0
+margin_right = 435.0
+margin_bottom = 450.0
+focus_mode = 0
+
+[node name="DescLabel" type="Label" parent="Cluelist"]
+margin_left = 458.0
+margin_top = 94.0
+margin_right = 859.0
+margin_bottom = 447.0
+autowrap = true
+
+[node name="QuestionList" type="Control" parent="."]
+editor/display_folded = true
+visible = false
+margin_right = 40.0
+margin_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="QuestionList"]
+margin_left = 64.0
+margin_top = 66.0
+margin_right = 960.0
+margin_bottom = 530.0
+color = Color( 0.109804, 0.105882, 0.12549, 1 )
+
+[node name="QuestButtList" type="VBoxContainer" parent="QuestionList"]
+margin_left = 236.0
+margin_top = 105.0
+margin_right = 787.0
+margin_bottom = 504.0
+
+[node name="Button" type="Button" parent="QuestionList"]
+margin_left = 130.837
+margin_top = 383.0
+margin_right = 897.837
+margin_bottom = 487.0
+focus_mode = 0
+text = "WHY KANGAROO COURT IS NOT A NORMAL SONG?"
+
+[node name="Present list" type="Control" parent="."]
+editor/display_folded = true
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 5 )
+
+[node name="ColorRect2" type="ColorRect" parent="Present list"]
+margin_left = 226.0
+margin_top = 66.0
+margin_right = 771.0
+margin_bottom = 530.0
+color = Color( 0.109804, 0.105882, 0.12549, 1 )
+
+[node name="ColorRect3" type="ColorRect" parent="Present list"]
+margin_left = 253.0
+margin_top = 99.0
+margin_right = 498.0
+margin_bottom = 508.0
+color = Color( 0.4, 0.4, 0.4, 1 )
+
+[node name="ColorRect4" type="ColorRect" parent="Present list"]
+margin_left = 502.0
+margin_top = 99.0
+margin_right = 746.0
+margin_bottom = 508.0
+color = Color( 0.4, 0.4, 0.4, 1 )
+
+[node name="Butt list" type="Control" parent="Present list"]
+margin_left = 265.0
+margin_top = 122.0
+margin_right = 481.0
+margin_bottom = 489.0
+
+[node name="Position" type="Position2D" parent="Present list/Butt list"]
+position = Vector2( 14, 10 )
+
+[node name="Present desc" type="Label" parent="Present list"]
+margin_left = 514.0
+margin_top = 128.0
+margin_right = 732.0
+margin_bottom = 479.0
+
+[node name="Button" type="Button" parent="Present list"]
+margin_left = 693.0
+margin_top = 555.0
+margin_right = 795.0
+margin_bottom = 589.0
+text = "TEST"
+
+[node name="ItemList" type="ItemList" parent="Present list"]
+margin_left = 262.0
+margin_top = 114.0
+margin_right = 435.0
+margin_bottom = 491.0
+
+[node name="fps_label" type="Label" parent="."]
+margin_left = 4.0
+margin_top = 3.0
+margin_right = 44.0
+margin_bottom = 17.0
+
+[node name="Present_button" type="Button" parent="."]
+visible = false
+margin_left = 716.0
+margin_top = 469.331
+margin_right = 853.0
+margin_bottom = 518.331
+focus_mode = 0
+shortcut_in_tooltip = false
+enabled_focus_mode = 0
+text = "PRESENT"
+
+[node name="Indict" type="Control" parent="."]
+editor/display_folded = true
+visible = false
+margin_left = 31.5035
+margin_right = 71.5035
+margin_bottom = 40.0
+
+[node name="ColorRect" type="ColorRect" parent="Indict"]
+margin_left = 387.0
+margin_top = 165.0
+margin_right = 567.0
+margin_bottom = 205.0
+color = Color( 0.211765, 0.211765, 0.211765, 1 )
+
+[node name="Espella button" type="Button" parent="Indict"]
+margin_left = 109.0
+margin_top = 220.0
+margin_right = 350.0
+margin_bottom = 404.0
+focus_mode = 0
+action_mode = 0
+enabled_focus_mode = 0
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="WordDrop"]
-shape = SubResource( 1 )
+[node name="Espella mugshot" type="Sprite" parent="Indict/Espella button"]
+position = Vector2( 120.857, 93.6732 )
+scale = Vector2( 0.300024, 0.300024 )
+texture = ExtResource( 6 )
 
-[node name="ColorRect" type="ColorRect" parent="WordDrop"]
-margin_left = -32.0
-margin_top = -33.0
-margin_right = 32.0
-margin_bottom = 31.0
-
-[node name="FollowButt" type="Button" parent="."]
-margin_left = -99.0
-margin_top = 124.0
-margin_right = -87.0
-margin_bottom = 149.0
-custom_styles/normal = SubResource( 2 )
-script = ExtResource( 3 )
+[node name="Brentilda button" type="Button" parent="Indict"]
+margin_left = 364.0
+margin_top = 221.0
+margin_right = 605.0
+margin_bottom = 404.0
+focus_mode = 0
+action_mode = 0
+enabled_focus_mode = 0
 __meta__ = {
 "_edit_group_": true
 }
 
-[node name="FollowArea" type="Area2D" parent="FollowButt"]
-position = Vector2( 5.97427, 12.5049 )
-scale = Vector2( 0.183946, 0.385926 )
-z_as_relative = false
+[node name="Brentilda mugshot" type="Sprite" parent="Indict/Brentilda button"]
+position = Vector2( 120.663, 92.8373 )
+scale = Vector2( 0.300024, 0.300024 )
+texture = ExtResource( 7 )
 
-[node name="FollowCollision" type="CollisionShape2D" parent="FollowButt/FollowArea"]
-z_as_relative = false
-shape = SubResource( 4 )
+[node name="Hajime button" type="Button" parent="Indict"]
+margin_left = 623.0
+margin_top = 221.0
+margin_right = 864.0
+margin_bottom = 405.0
+focus_mode = 0
+action_mode = 0
+enabled_focus_mode = 0
+__meta__ = {
+"_edit_group_": true
+}
 
-[node name="Layer_1" type="CanvasLayer" parent="."]
-layer = -1
+[node name="Hajime mugshot" type="Sprite" parent="Indict/Hajime button"]
+position = Vector2( 120.663, 92.837 )
+scale = Vector2( 0.300024, 0.300024 )
+texture = ExtResource( 8 )
 
-[connection signal="item_selected" from="labelBucket/wordlist" to="." method="_on_wordlist_item_selected"]
-[connection signal="area_entered" from="FollowButt/FollowArea" to="FollowButt" method="_on_Area2D_area_entered"]
-[connection signal="area_exited" from="FollowButt/FollowArea" to="FollowButt" method="_on_Area2D_area_exited"]
+[node name="Label" type="Label" parent="Indict"]
+margin_left = 403.795
+margin_top = 180.109
+margin_right = 549.795
+margin_bottom = 194.109
+text = "WHO IS RESPONSIBLE?"
+
+[connection signal="pressed" from="Present list/Button" to="Present list" method="_on_Button_pressed"]
+[connection signal="pressed" from="Present_button" to="." method="_on_Present_button_pressed"]
