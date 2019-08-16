@@ -46,6 +46,9 @@ func _ready():
 
 func _process(delta):
 	
+	if (Input.is_action_just_pressed("restart")):
+		get_tree().reload_current_scene()
+	
 	fps_label.set_text( str(Engine.get_frames_per_second()) + "\n scenestep: " + 
 	String(progress.scenestep) + "\n Robo step: " + String(get_node("../NPCs/Robot").scenestep) +
 	"\n Robo stage: " + String(get_node("../NPCs/Robot").stagestep))
