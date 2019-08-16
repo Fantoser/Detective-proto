@@ -11,7 +11,7 @@ var trans = Transform()
 
 var control = true
 var max_speed = 2
-var turn_speed = 40
+var turn_speed = 10
 var accel = 19.0
 var deaccel = 14.0
 var sharp_turn_threshold = 140
@@ -119,7 +119,8 @@ func _physics_process(delta):
 	if (is_on_floor()):
 		movement_dir = lv
 		
-	linear_velocity = move_and_slide(lv,-g.normalized())
+#	linear_velocity = move_and_slide(lv,-g.normalized())
+	linear_velocity = move_and_slide_with_snap(lv, Vector3(0, -6, 0), Vector3(0, 1, 0), true, 4, deg2rad(30), false)
 #	get_node("../Label").text = str(hspeed)
 	
 ### WE ANIMATE NOW ###
