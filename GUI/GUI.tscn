@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://GUI/gui.gd" type="Script" id=1]
 [ext_resource path="res://GUI/Open dialogue/Dialogue.tscn" type="PackedScene" id=2]
@@ -9,6 +9,8 @@
 [ext_resource path="res://assets/Brentilda mugshot.png" type="Texture" id=7]
 [ext_resource path="res://assets/Hajime mugshot.png" type="Texture" id=8]
 
+[sub_resource type="CubeMesh" id=1]
+
 [node name="GUI" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -17,11 +19,13 @@ margin_top = -2.16479
 margin_right = -2.56201
 margin_bottom = -2.16479
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Dialogue" parent="." instance=ExtResource( 2 )]
 
 [node name="Menu" type="Control" parent="."]
-editor/display_folded = true
 visible = false
 margin_right = 40.0
 margin_bottom = 40.0
@@ -67,8 +71,6 @@ text = "INDICT"
 visible = false
 
 [node name="Cluelist" type="Control" parent="."]
-editor/display_folded = true
-visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 script = ExtResource( 4 )
@@ -86,16 +88,21 @@ margin_top = 93.0
 margin_right = 435.0
 margin_bottom = 450.0
 focus_mode = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="DescLabel" type="Label" parent="Cluelist"]
+[node name="DescLabel" type="RichTextLabel" parent="Cluelist"]
 margin_left = 458.0
 margin_top = 94.0
 margin_right = 859.0
-margin_bottom = 447.0
-autowrap = true
+margin_bottom = 452.0
+bbcode_enabled = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="QuestionList" type="Control" parent="."]
-editor/display_folded = true
 visible = false
 margin_right = 40.0
 margin_bottom = 40.0
@@ -112,17 +119,11 @@ margin_left = 236.0
 margin_top = 105.0
 margin_right = 787.0
 margin_bottom = 504.0
-
-[node name="Button" type="Button" parent="QuestionList"]
-margin_left = 130.837
-margin_top = 383.0
-margin_right = 897.837
-margin_bottom = 487.0
-focus_mode = 0
-text = "WHY KANGAROO COURT IS NOT A NORMAL SONG?"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Present list" type="Control" parent="."]
-editor/display_folded = true
 visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -195,7 +196,6 @@ enabled_focus_mode = 0
 text = "PRESENT"
 
 [node name="Indict" type="Control" parent="."]
-editor/display_folded = true
 visible = false
 margin_left = 31.5035
 margin_right = 71.5035
@@ -266,5 +266,14 @@ margin_right = 549.795
 margin_bottom = 194.109
 text = "WHO IS RESPONSIBLE?"
 
+[node name="Viewport" type="Viewport" parent="."]
+size = Vector2( 3000, 3000 )
+own_world = true
+transparent_bg = true
+
+[node name="MeshInstance" type="MeshInstance" parent="Viewport"]
+mesh = SubResource( 1 )
+material/0 = null
+[connection signal="item_selected" from="Cluelist/ItemList" to="Cluelist" method="_on_ItemList_item_selected"]
 [connection signal="pressed" from="Present list/Button" to="Present list" method="_on_Button_pressed"]
 [connection signal="pressed" from="Present_button" to="." method="_on_Present_button_pressed"]

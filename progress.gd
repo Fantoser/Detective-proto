@@ -10,7 +10,7 @@ var variables = { # Variables used as conditions to know what dialogue block the
 #	var1 = true # This is here just for demonstration (and debugging) pourposes.
 	word = "",
 	desc = "",
-	attributes = [],
+	atrbs = [],
 	list = [],
 	present = "false",
 	add_clue = "false"
@@ -21,12 +21,14 @@ var mousemode = false
 var cutscene = false
 var scenestep = 0
 
+var npc = {}
+
 var control = true
 var gui = 0
 var pause = false
 var case = 1
 var current_dialogue = ""
-var dialogue_start = ""
+var dialogue_start = "first"
 var current_talkdialogue = ""
 var list = []
 var presentlist = []

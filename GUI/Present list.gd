@@ -50,10 +50,14 @@ func _change_desc(clue):
 func _present(clue):
 	self.hide()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
-	if progress.presentlist.find(clue, 0) != -1:
-		textbox.initiate(progress.current_dialogue + "_present", clue)
+	if textbox.has_block(progress.current_dialogue, clue):
+		textbox.initiate(progress.current_dialogue, clue)
 	else:
-		textbox.initiate(progress.current_dialogue + "_present", "Nothing")
+		textbox.initiate(progress.current_dialogue, "present")
+#	if progress.presentlist.find(clue, 0) != -1:
+#		textbox.initiate(progress.current_dialogue + "_present", clue)
+#	else:
+#		textbox.initiate(progress.current_dialogue + "_present", "Nothing")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 #func _process(delta):

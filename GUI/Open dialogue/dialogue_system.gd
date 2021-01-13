@@ -53,6 +53,7 @@ var enable_continue_indicator : bool = true # Enable or disable the 'continue_in
 var sprite_offset : Vector2 = Vector2(30, 0) # Used for polishing avatars' position. Can use negative values.
 var name_offset : Vector2 = Vector2(-10, -15) # Offsets the name labels relative to the frame borders.
 var show_names : bool = true # Turn on and off the character name labels
+signal dialogue_progress
 # END OF SETUP #
 
 
@@ -177,7 +178,6 @@ func set_frame(): # Mostly aligment operations.
 #	name_right.position = 'right'
 	name_right.rect_position.y = name_offset.y
 
-
 func initiate(file_id, block = 'first'): # Load the whole dialogue into a variable
 	id = file_id
 	var file = File.new()
@@ -188,6 +188,18 @@ func initiate(file_id, block = 'first'): # Load the whole dialogue into a variab
 	first(block) # Call the first dialogue block
 
 #func start_from(file_id, block): # Similar to 
+
+func has_block(file_id, block):
+	id = file_id
+	var file = File.new()
+	file.open('%s/%s.json' % [dialogues_folder, id], file.READ)
+	var json = file.get_as_text()
+	dialogue = JSON.parse(json).result
+	file.close()
+	if dialogue.has(block):
+		return true
+	else:
+		return false
 
 func clean(): # Resets some variables to prevent errors.
 	continue_indicator.hide()
@@ -214,7 +226,7 @@ func first(block):
 				update_dialogue(dialogue['first']) # It is. Use the 'first' block.
 		else:
 				update_dialogue(dialogue['first'])
-	else: # We are going to use a custom first block
+	else: # We are going to use a custom first blodck
 		update_dialogue(dialogue[block])
 
 
@@ -223,6 +235,7 @@ func update_dialogue(step): # step == whole dialogue block
 	current = step
 	print("Next")
 	progress.scenestep += 1
+	progress.npc = {}
 	number_characters = 0 # Resets the counter
 	# Check what kind of interaction the block is
 	match step['type']:
@@ -311,11 +324,11 @@ func update_dialogue(step): # step == whole dialogue block
 					randomize()
 					next_step = step['value'][randi() % step['value'].size()]
 			
-			if step.has('text'):
-				label.bbcode_text = step['text']
+			if step.has('content'):
+				label.bbcode_text = step['content']
 				check_pauses(label.get_text())
 				check_newlines(phrase_raw)
-				clean_bbcode(step['text'])
+				clean_bbcode(step['content'])
 				number_characters = phrase_raw.length()
 				check_animation(step)
 				check_names(step)
@@ -329,6 +342,7 @@ func update_dialogue(step): # step == whole dialogue block
 	elif enable_continue_indicator: # If typewriter effect is disabled check if the ContinueIndicator should be displayed
 		continue_indicator.show()
 		animations.play('Continue_Indicator')
+	emit_signal("dialogue_progress")
 
 
 func check_pauses(string):
@@ -397,11 +411,14 @@ func next():
 			return # Stop the function here.
 	else: # The typewriter effect is disabled so we need to make sure the text is fully displayed.
 		label.visible_characters = -1 # -1 tells the RichTextLabel to show all the characters.
-	
+
+	if progress.variables["word"] != "":
+		thought._add_clue()
+
 	if next_step == '': # Doesn't have a 'next' block.
 		print("END")
-		if progress.list["word"] != "":
-			thought._add_clue(progress.list)
+#		if progress.list["word"] != "":
+#			thought._add_clue(progress.list)
 		if current.has('animation_out'):
 			animate_sprite(current['position'], current['avatar'], current['animation_out'])
 			yield(tween, "tween_completed")

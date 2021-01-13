@@ -1,0 +1,77 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://assets/Root Motion test/root_motion.fbx" type="PackedScene" id=1]
+[ext_resource path="res://assets/Animation/walk_fbx.anim" type="Animation" id=2]
+
+[sub_resource type="CapsuleShape" id=1]
+radius = 0.24576
+height = 1.30614
+
+[sub_resource type="AnimationNodeAnimation" id=2]
+animation = "idle"
+
+[sub_resource type="AnimationNodeAnimation" id=3]
+animation = "sneak"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=4]
+blend_point_0/node = SubResource( 2 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 3 )
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeAnimation" id=5]
+animation = "idle"
+
+[sub_resource type="AnimationNodeAnimation" id=13]
+animation = "walk_fbx"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id=7]
+blend_point_0/node = SubResource( 5 )
+blend_point_0/pos = 0.0
+blend_point_1/node = SubResource( 13 )
+blend_point_1/pos = 1.0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=8]
+switch_mode = 1
+xfade_time = 0.3
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=9]
+switch_mode = 1
+xfade_time = 0.3
+
+[sub_resource type="AnimationNodeStateMachine" id=10]
+states/sneak/node = SubResource( 4 )
+states/sneak/position = Vector2( 533, 106 )
+states/walk/node = SubResource( 7 )
+states/walk/position = Vector2( 262, 106 )
+transitions = [ "walk", "sneak", SubResource( 8 ), "sneak", "walk", SubResource( 9 ) ]
+start_node = "walk"
+
+[sub_resource type="AnimationNodeBlendTree" id=11]
+graph_offset = Vector2( -53, 98 )
+nodes/StateMachine/node = SubResource( 10 )
+nodes/StateMachine/position = Vector2( 80, 160 )
+node_connections = [ "output", 0, "StateMachine" ]
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=12]
+
+[node name="root_motion" instance=ExtResource( 1 )]
+
+[node name="CollisionShape" type="CollisionShape" parent="." index="0"]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 0.90294, 0 )
+shape = SubResource( 1 )
+
+[node name="Armature" parent="." index="1"]
+transform = Transform( 100, 0, 0, 0, -1.19209e-05, 100, 0, -100, -1.19209e-05, 0, 0, 0 )
+
+[node name="AnimationPlayer" parent="." index="2"]
+anims/walk_fbx = ExtResource( 2 )
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="3"]
+tree_root = SubResource( 11 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+root_motion_track = NodePath("Armature:RootMotion")
+parameters/StateMachine/playback = SubResource( 12 )
+parameters/StateMachine/sneak/blend_position = 1.0
+parameters/StateMachine/walk/blend_position = 1.0

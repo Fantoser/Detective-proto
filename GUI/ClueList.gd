@@ -6,11 +6,6 @@ onready var desc = get_node("DescLabel")
 
 var active = false
 
-# Called when the node enters the scene tree for the first time.
-func _process(delta):
-	if list.is_anything_selected():
-		_changedesc()
-
 func _makelist():
 	
 	list.clear()
@@ -18,6 +13,7 @@ func _makelist():
 	for item in gui.cluelist.keys():
 		list.add_item(item)
 
-func _changedesc():
-	var selected = list.get_item_text(list.get_selected_items()[0])
-	desc.text = gui.cluelist[selected]
+func _on_ItemList_item_selected(index):
+	var selected = list.get_item_text(index)
+	
+	desc.set_bbcode(gui.cluelist[selected].c_unescape())

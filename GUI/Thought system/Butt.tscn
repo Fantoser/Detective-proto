@@ -2,7 +2,6 @@
 
 [ext_resource path="res://GUI/Thought system/Butt.gd" type="Script" id=1]
 
-
 [node name="Abutt" type="Button"]
 show_behind_parent = true
 margin_right = 76.0
@@ -12,4 +11,6 @@ action_mode = 0
 enabled_focus_mode = 1
 text = "TEXT"
 script = ExtResource( 1 )
-
+__meta__ = {
+"_edit_use_anchors_": false
+}

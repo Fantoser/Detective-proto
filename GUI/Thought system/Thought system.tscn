@@ -145,7 +145,6 @@ margin_bottom = 189.05
 autowrap = true
 
 [node name="buttBucket" type="Control" parent="."]
-editor/display_folded = true
 margin_left = 87.0
 margin_top = 231.0
 margin_right = 780.0
@@ -182,7 +181,6 @@ max_text_lines = 15
 position = Vector2( 23.7554, 7.4525 )
 
 [node name="WordDrop" type="Area2D" parent="."]
-editor/display_folded = true
 visible = false
 position = Vector2( 224.036, 154.909 )
 scale = Vector2( 1.46583, 0.551744 )
@@ -200,7 +198,6 @@ margin_right = 32.0
 margin_bottom = 31.0
 
 [node name="FollowButt" type="Button" parent="."]
-editor/display_folded = true
 margin_left = -99.0
 margin_top = 124.0
 margin_right = -87.0
@@ -239,7 +236,6 @@ margin_top = 512.0
 margin_right = 923.0
 margin_bottom = 574.0
 autowrap = true
-
 [connection signal="item_selected" from="labelBucket/wordlist" to="." method="_on_wordlist_item_selected"]
 [connection signal="area_entered" from="FollowButt/FollowArea" to="FollowButt" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="FollowButt/FollowArea" to="FollowButt" method="_on_Area2D_area_exited"]

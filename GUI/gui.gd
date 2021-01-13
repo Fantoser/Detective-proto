@@ -3,7 +3,7 @@ extends Control
 onready var progress = PROGRESS
 onready var root = get_tree().get_current_scene()
 onready var buttlist = $"QuestionList/QuestButtList"
-onready var player = $"../Luke"
+onready var player = $"../Detective"
 onready var camera = $"../Playercam"
 onready var menu = $"Menu"
 onready var cluesbutt = $"Menu/Cluesbutt"
@@ -49,9 +49,9 @@ func _process(delta):
 	if (Input.is_action_just_pressed("restart")):
 		get_tree().reload_current_scene()
 	
-	fps_label.set_text( str(Engine.get_frames_per_second()) + "\n scenestep: " + 
-	String(progress.scenestep) + "\n Robo step: " + String(get_node("../NPCs/Robot").scenestep) +
-	"\n Robo stage: " + String(get_node("../NPCs/Robot").stagestep))
+#	fps_label.set_text( str(Engine.get_frames_per_second()) + "\n scenestep: " + 
+#	String(progress.scenestep) + "\n Robo step: " + String(get_node("../NPCs/Robot").scenestep) +
+#	"\n Robo stage: " + String(get_node("../NPCs/Robot").stagestep))
 
 	if progress.mousemode == true:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -141,7 +141,7 @@ func _on_Present_button_pressed():
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		clueslist.hide()
 		$Present_button.hide()
-		if progress.presentlist.find(selected, 0) != -1:
-			dialogue.initiate(progress.current_dialogue + "_present", selected)
+		if dialogue.has_block(progress.current_dialogue, selected):
+			dialogue.initiate(progress.current_dialogue, selected)
 		else:
-			dialogue.initiate(progress.current_dialogue + "_present", "Nothing")
+			dialogue.initiate(progress.current_dialogue, "present")

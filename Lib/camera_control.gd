@@ -66,6 +66,8 @@ var coltype = "clue"
 func _ready():
 	_check_actions([forward_action, backward_action, left_action, right_action, gui_action, up_action, down_action])
 
+	distance_con = distance
+	
 	if privot:
 		privot = get_node(privot)
 	else:
@@ -114,10 +116,10 @@ func _process(delta):
 		_update_movement(delta)
 		
 ### MODECHANGE ###
-	var seconds = 0.3
+	var seconds = 0.5
 	var zoom_p_second = 12 /seconds
-	var player = get_node("../Luke/rig/Skeleton")
-	var playrot = get_node("../Luke/rig/Skeleton").rotation_degrees[1]
+	var player = get_node("../Detective/Armature/Skeleton")
+	var playrot = player.rotation_degrees[1]
 
 	if rotation_degrees[1] > playrot:
 		rotate_to = playrot-rotation_degrees[1] /seconds
@@ -128,34 +130,38 @@ func _process(delta):
 		if firstmode == true:
 			distance -= zoom_p_second * delta
 #			rotation_degrees[1] += rotate_to * delta
-			if distance <= 0:
+			if distance <= zoom_p_second * delta:
+				distance = 0
 				modechange = false
 				pitch_limit = 180
-				_pitch = -20
+				_pitch = -40
 				player.visible = false
 #				rotate_privot = true
 				
 		if firstmode == false:
 			distance += zoom_p_second * delta
+			pitch_limit = 0
+			if distance > 1:
+				player.visible = true
 			if distance >= distance_con:
 				modechange = false
 
 	if Input.is_action_just_pressed("button2"):
 		firstmode = not firstmode
 		modechange = true
-		if firstmode == false:
-			player.visible = true
-			pitch_limit = 0
-#			rotation_degrees = Vector3(-40, 0, 0)*
 
 ### RAYCAST ###
 	if ray.is_colliding():
 		var collider = ray.get_collider()
 		progress.current_dialogue = collider.dialogue
 		progress.dialogue_start = collider.starter
-		progress.list = collider.list
-		coltype = collider.type
-		progress.presentlist = collider.presentlist
+#		progress.list = collider.list
+#		coltype = collider.type
+#		progress.presentlist = collider.presentlist
+		if collider.npc == true:
+			coltype = "npc"
+		else:
+			coltype = "clue"
 	else:
 		progress.current_dialogue = ""
 		progress.list = []

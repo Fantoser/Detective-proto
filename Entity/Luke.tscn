@@ -9,7 +9,7 @@
 radius = 0.447667
 height = 2.18339
 
-[node name="Luke" index="0" instance=ExtResource( 1 )]
+[node name="Luke" instance=ExtResource( 1 )]
 
 [node name="Skeleton" parent="rig" index="0"]
 transform = Transform( 0.291, 0, 0, 0, 0.291, 0, 0, 0, 0.291, 0, 0, 0 )
@@ -53,6 +53,4 @@ shape = SubResource( 1 )
 
 [node name="Floorcast" type="RayCast" parent="." index="3"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.185065, 0 )
-enabled = true
 cast_to = Vector3( 0, -0.45, 0 )
-

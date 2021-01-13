@@ -48,13 +48,13 @@ var hiding = ["hid in", "put in", "came out of"]
 var person = ["saw", "talked with", "called"]
 
 var afterwords = {
-    thrown = "at",
-    change = "with",
-    used = "on",
-    replaced = "with",
-    gave = "to",
-    hid = "in",
-    placed = ["on", "in", "next to"],
+	thrown = "at",
+	change = "with",
+	used = "on",
+	replaced = "with",
+	gave = "to",
+	hid = "in",
+	placed = ["on", "in", "next to"],
 }
 
 var Categories ={ 
@@ -85,13 +85,13 @@ var Categories ={
 	when = ["heard", "saw", "went to", "was in"],
 	
 	afterwords = {
-	    thrown = "at",
-	    change = "with",
-	    used = "on",
-	    replaced = "with",
-	    gave = "to",
-	    hid = "in",
-	    placed = ["on", "in", "next to"],
+		thrown = "at",
+		change = "with",
+		used = "on",
+		replaced = "with",
+		gave = "to",
+		hid = "in",
+		placed = ["on", "in", "next to"],
 	}
 }
 
@@ -171,34 +171,39 @@ func _input(event):
 
 func _add_clue(list = null):
 
-#If list not added, get it from progress
-	if list == null:
-		list = {word = progress.variables["word"], desc = progress.variables["desc"], attributes = progress.variables["attributes"]}
+	var word = progress.variables["word"]
+	var description = progress.variables["desc"]
+	var attributes = progress.variables["atrbs"]
+	progress.variables["word"] = ""
+	progress.variables["desc"] = ""
+	progress.variables["atrbs"] = ""
 
 #Check if clue already obtained
 	var doit = true
 	for butt in $buttBucket.get_children():
 		if butt.name != "ButtonPos":
-			if butt.text == list["word"]:
+			if butt.text == word:
+				get_parent().cluelist[word] += description
 				doit = false
 
 #Adding clue
 	if doit == true:
 
-		get_parent().cluelist[list["word"]] = list["desc"]
+		get_parent().cluelist[word] = description
 
 		var cluebutt = Thebutt.instance()
 		$buttBucket.add_child(cluebutt)
 
-		cluebutt.text = list["word"]
+		cluebutt.text = word
 		cluebutt.enabled_focus_mode = false
 
-		cluebutt.desc = list["desc"]
+		cluebutt.desc = description
 
-		for item in list["attributes"]:
-			for category in Categories.keys():
-				if str(category) == item:
-					cluebutt.list += Categories[category]
+		if attributes.size() > 0:
+			for item in attributes.split(","):
+				for category in Categories.keys():
+					if str(category) == item:
+						cluebutt.list += Categories[category]
 
 		if $buttBucket/ButtonPos.position[0] + cluebutt.rect_size[0] > get_viewport().size[0] - 300:
 			$buttBucket/ButtonPos.position[0] = 10.488
