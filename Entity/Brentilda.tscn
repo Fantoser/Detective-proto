@@ -538,7 +538,7 @@ transform = Transform( 1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 1.71
 shape = SubResource( 1 )
 
 [node name="Armature" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 5.96046e-08, -1, 0, 1, 5.96046e-08, 0, 0, 0 )
+transform = Transform( 1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0 )
 
 [node name="Skeleton" type="Skeleton" parent="Armature"]
 transform = Transform( 0.227, 0, 0, 0, 0.227, 0, 0, 0, 0.227, 0, 0, 0 )

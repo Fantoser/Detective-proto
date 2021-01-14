@@ -82,10 +82,10 @@ func _process(delta):
 				questlist.show()
 				progress.gui = 3
 
-	if Input.is_action_just_pressed("button3"):
+#	if Input.is_action_just_pressed("button3"):
 #		print(cluelist)
 #		print(progress.list)
-		thought._add_clue({"word": "Letters", "desc": "Some letter the victim sent to Espella over the years", "attributes": ["small"]})
+#		thought._add_clue({"word": "Letters", "desc": "Some letter the victim sent to Espella over the years", "attributes": ["small"]})
 
 	if cluesbutt.pressed:
 		clueslist._makelist()
@@ -110,16 +110,12 @@ func _process(delta):
 		camera.control = false
 		
 	if progress.variables["present"] == "true":
-#		present._makelist()
-#		present.show()
 		clueslist._makelist()
 		clueslist.show()
 		$Present_button.show()
 		if progress.mousemode == false:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		progress.variables["present"] = "on"
-#	if progress.variables["present"] == "false":
-#		clueslist.hide()
 
 	if progress.variables["add_clue"] == "true":
 		thought._add_clue()

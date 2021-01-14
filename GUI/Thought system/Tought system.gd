@@ -183,8 +183,8 @@ func _add_clue(list = null):
 	for butt in $buttBucket.get_children():
 		if butt.name != "ButtonPos":
 			if butt.text == word:
-				get_parent().cluelist[word] += description
 				doit = false
+				get_parent().cluelist[word] += description
 
 #Adding clue
 	if doit == true:
@@ -199,11 +199,10 @@ func _add_clue(list = null):
 
 		cluebutt.desc = description
 
-		if attributes.size() > 0:
-			for item in attributes.split(","):
-				for category in Categories.keys():
-					if str(category) == item:
-						cluebutt.list += Categories[category]
+		for item in attributes.split(","):
+			for category in Categories.keys():
+				if str(category) == item:
+					cluebutt.list += Categories[category]
 
 		if $buttBucket/ButtonPos.position[0] + cluebutt.rect_size[0] > get_viewport().size[0] - 300:
 			$buttBucket/ButtonPos.position[0] = 10.488

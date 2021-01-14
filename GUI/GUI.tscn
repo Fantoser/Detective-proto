@@ -183,6 +183,9 @@ margin_left = 4.0
 margin_top = 3.0
 margin_right = 44.0
 margin_bottom = 17.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Present_button" type="Button" parent="."]
 visible = false
@@ -274,6 +277,7 @@ transparent_bg = true
 [node name="MeshInstance" type="MeshInstance" parent="Viewport"]
 mesh = SubResource( 1 )
 material/0 = null
+[connection signal="visibility_changed" from="Cluelist" to="Cluelist" method="_on_Cluelist_visibility_changed"]
 [connection signal="item_selected" from="Cluelist/ItemList" to="Cluelist" method="_on_ItemList_item_selected"]
 [connection signal="pressed" from="Present list/Button" to="Present list" method="_on_Button_pressed"]
 [connection signal="pressed" from="Present_button" to="." method="_on_Present_button_pressed"]
