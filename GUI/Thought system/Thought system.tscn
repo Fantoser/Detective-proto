@@ -1,8 +1,13 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://GUI/Thought system/Tought system.gd" type="Script" id=1]
 [ext_resource path="res://GUI/Thought system/Butt.tscn" type="PackedScene" id=2]
 [ext_resource path="res://GUI/Thought system/Insertspace.tscn" type="PackedScene" id=3]
+[ext_resource path="res://assets/Themes/default.tres" type="Theme" id=4]
+[ext_resource path="res://assets/Themes/default2.tres" type="Theme" id=5]
+[ext_resource path="res://assets/Fonts/Outline_big.tres" type="DynamicFont" id=6]
+[ext_resource path="res://assets/Themes/wordtheme.tres" type="Theme" id=7]
+[ext_resource path="res://GUI/Thought system/wordlist.gd" type="Script" id=8]
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 32.0053, 31.9216 )
@@ -49,7 +54,8 @@ func _on_Area2D_area_entered(area):
 
 
 func _on_Area2D_area_exited(area):
-	active = false"
+	active = false
+"
 
 [sub_resource type="RectangleShape2D" id=4]
 extents = Vector2( 33.3413, 32.2846 )
@@ -57,128 +63,190 @@ extents = Vector2( 33.3413, 32.2846 )
 [node name="Thought system" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -0.0991821
+margin_right = -0.0991821
+theme = ExtResource( 5 )
 script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 Thebutt = ExtResource( 2 )
 Insertspace = ExtResource( 3 )
 
-[node name="ColorRect5" type="ColorRect" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -449.0
-margin_top = -288.0
-margin_right = 449.0
-margin_bottom = -239.0
-color = Color( 0.109804, 0.105882, 0.12549, 1 )
-
 [node name="ColorRect4" type="ColorRect" parent="."]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -449.0
-margin_top = -232.0
-margin_right = 449.0
-margin_bottom = 298.0
+visible = false
+margin_left = 66.7758
+margin_top = 70.3354
+margin_right = 964.776
+margin_bottom = 600.335
 color = Color( 0.109804, 0.105882, 0.12549, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="ColorRect" type="ColorRect" parent="."]
-margin_left = 84.5
-margin_top = 88.9502
-margin_right = 934.5
-margin_bottom = 201.95
+[node name="Grid2" type="ColorRect" parent="."]
+margin_left = 183.0
+margin_top = 128.0
+margin_right = 433.0
+margin_bottom = 306.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-color = Color( 0.4, 0.4, 0.4, 1 )
+color = Color( 0.6, 0.6, 0.6, 0.196078 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="ColorRect2" type="ColorRect" parent="."]
-margin_left = 85.0
-margin_top = 234.0
-margin_right = 797.0
-margin_bottom = 374.0
+[node name="Desc" type="ColorRect" parent="."]
+margin_left = 445.0
+margin_top = 128.0
+margin_right = 843.0
+margin_bottom = 306.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-color = Color( 0.4, 0.4, 0.4, 1 )
+color = Color( 0.6, 0.6, 0.6, 0.196078 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="ColorRect3" type="ColorRect" parent="."]
-margin_left = 85.0
-margin_top = 389.0
-margin_right = 935.0
-margin_bottom = 473.0
+[node name="Label bucket" type="ColorRect" parent="."]
+margin_left = 184.0
+margin_top = 322.0
+margin_right = 842.0
+margin_bottom = 406.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-color = Color( 0.4, 0.4, 0.4, 1 )
+color = Color( 0.6, 0.6, 0.6, 0.196078 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="ColorRect6" type="ColorRect" parent="."]
-margin_left = 85.0
-margin_top = 498.331
-margin_right = 935.0
-margin_bottom = 582.331
+[node name="current_theory" type="ColorRect" parent="."]
+margin_left = 184.0
+margin_top = 460.0
+margin_right = 842.0
+margin_bottom = 538.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-color = Color( 0.4, 0.4, 0.4, 1 )
+color = Color( 0.6, 0.6, 0.6, 0.196078 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="QuestionLabel" type="Label" parent="."]
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-margin_left = 63.0
-margin_top = -281.0
-margin_right = -66.0
-margin_bottom = -244.0
+margin_left = 183.0
+margin_top = 67.0
+margin_right = 843.0
+margin_bottom = 113.0
+custom_fonts/font = ExtResource( 6 )
 align = 1
 valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="Grid" type="GridContainer" parent="."]
-margin_left = 78.0
-margin_top = 104.0
-margin_right = 118.0
-margin_bottom = 144.0
-columns = 10
+[node name="Grid" type="ScrollContainer" parent="."]
+margin_left = 183.0
+margin_top = 128.0
+margin_right = 433.0
+margin_bottom = 306.0
+theme = ExtResource( 4 )
+scroll_horizontal_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
-[node name="DescLabel" type="Label" parent="."]
-margin_left = 92.5501
-margin_top = 98.0502
-margin_right = 924.55
-margin_bottom = 189.05
-autowrap = true
+[node name="HBoxContainer" type="VBoxContainer" parent="Grid"]
+margin_right = 250.0
+size_flags_horizontal = 3
+
+[node name="DescLabel" type="RichTextLabel" parent="."]
+margin_left = 458.0
+margin_top = 140.0
+margin_right = 830.0
+margin_bottom = 295.0
+theme = ExtResource( 4 )
+bbcode_enabled = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="buttBucket" type="Control" parent="."]
-margin_left = 87.0
-margin_top = 231.0
-margin_right = 780.0
-margin_bottom = 378.0
+visible = false
+margin_left = 184.0
+margin_top = 128.0
+margin_right = 510.0
+margin_bottom = 307.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ButtonPos" type="Position2D" parent="buttBucket"]
 position = Vector2( 10.4885, 17.555 )
 
 [node name="Label" type="Label" parent="."]
-margin_left = 87.0
-margin_top = 480.0
-margin_right = 179.0
-margin_bottom = 494.0
+margin_left = 183.0
+margin_top = 421.0
+margin_right = 401.0
+margin_bottom = 460.0
+custom_fonts/font = ExtResource( 6 )
 text = "Current theory"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Submit" type="Button" parent="."]
+margin_left = 690.0
+margin_top = 415.0
+margin_right = 823.0
+margin_bottom = 453.0
+focus_mode = 0
+custom_fonts/font = ExtResource( 6 )
+text = "SUBMIT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CurrentLabel" type="Label" parent="."]
+margin_left = 194.0
+margin_top = 472.0
+margin_right = 833.0
+margin_bottom = 536.0
+theme = ExtResource( 7 )
+autowrap = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="labelBucket" type="Control" parent="."]
-margin_left = 87.0
-margin_top = 392.0
-margin_right = 937.0
-margin_bottom = 471.0
+margin_left = 183.0
+margin_top = 322.0
+margin_right = 832.0
+margin_bottom = 405.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="wordlist" type="ItemList" parent="labelBucket"]
 light_mask = 2
-margin_left = -213.18
-margin_top = 116.0
-margin_right = -106.1
-margin_bottom = 135.99
+margin_left = -420.103
+margin_top = 57.8826
+margin_right = -270.103
+margin_bottom = 98.8826
+rect_min_size = Vector2( 150, 19.99 )
+focus_mode = 0
 size_flags_horizontal = 0
 size_flags_vertical = 0
 allow_reselect = true
 max_text_lines = 15
+auto_height = true
+script = ExtResource( 8 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="LabelPos" type="Position2D" parent="labelBucket"]
-position = Vector2( 23.7554, 7.4525 )
+position = Vector2( 12, 7.452 )
 
 [node name="WordDrop" type="Area2D" parent="."]
 visible = false
@@ -198,14 +266,15 @@ margin_right = 32.0
 margin_bottom = 31.0
 
 [node name="FollowButt" type="Button" parent="."]
-margin_left = -99.0
+margin_left = -564.049
 margin_top = 124.0
-margin_right = -87.0
+margin_right = -552.049
 margin_bottom = 149.0
 custom_styles/normal = SubResource( 2 )
 script = SubResource( 3 )
 __meta__ = {
-"_edit_group_": true
+"_edit_group_": true,
+"_edit_use_anchors_": false
 }
 
 [node name="FollowArea" type="Area2D" parent="FollowButt"]
@@ -218,24 +287,6 @@ z_as_relative = false
 shape = SubResource( 4 )
 
 [node name="Layer1" type="CanvasLayer" parent="."]
-
-[node name="Submit" type="Button" parent="."]
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-margin_left = 810.895
-margin_top = -61.2805
-margin_right = -101.105
-margin_bottom = -21.2805
-focus_mode = 0
-text = "SUBMIT"
-
-[node name="CurrentLabel" type="Label" parent="."]
-margin_left = 95.0
-margin_top = 512.0
-margin_right = 923.0
-margin_bottom = 574.0
-autowrap = true
 [connection signal="item_selected" from="labelBucket/wordlist" to="." method="_on_wordlist_item_selected"]
 [connection signal="area_entered" from="FollowButt/FollowArea" to="FollowButt" method="_on_Area2D_area_entered"]
 [connection signal="area_exited" from="FollowButt/FollowArea" to="FollowButt" method="_on_Area2D_area_exited"]

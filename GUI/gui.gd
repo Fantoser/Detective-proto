@@ -1,6 +1,8 @@
 extends Control
 
 onready var progress = PROGRESS
+var outline_big = load("res://assets/Fonts/Outline_big.tres")
+
 onready var root = get_tree().get_current_scene()
 onready var buttlist = $"QuestionList/QuestButtList"
 onready var player = $"../Detective"
@@ -19,30 +21,31 @@ onready var fps_label = get_node("fps_label")
 
 var cluelist = {}
 var qid = 0
+var clue = ""
 
 func _ready():
 	menu.hide()
 	clueslist.hide()
 	questlist.hide()
 	thought.hide()
-	for question in root.questions:
-
-		thought.leQuestions[qid] = {question = root.questions[qid]["question"], answer = [], raw_answer = ""}
-
-		var button = Button.new()
-		var separator = HSeparator.new()
-
-		button.text = question["question"]
-		button.set_focus_mode(0)
-		button.rect_min_size[1] = 40
-		separator.rect_min_size[1] = 30
-
-		button.connect("pressed", self, "_thought", [qid])
-
-		qid += 1
-
-		buttlist.add_child(button)
-		buttlist.add_child(separator)
+#	for question in root.questions:
+#
+#		thought.leQuestions[qid] = {question = root.questions[qid]["question"], answer = [], raw_answer = ""}
+#
+#		var button = Button.new()
+#		var separator = HSeparator.new()
+#
+#		button.text = question["question"]
+#		button.set_focus_mode(0)
+#		button.rect_min_size[1] = 40
+#		separator.rect_min_size[1] = 30
+#
+#		button.connect("pressed", self, "_thought", [qid])
+#
+#		qid += 1
+#
+#		buttlist.add_child(button)
+#		buttlist.add_child(separator)
 
 func _process(delta):
 	
@@ -56,6 +59,8 @@ func _process(delta):
 	if progress.mousemode == true:
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 
+	$tablet.visible = progress.pause
+
 	if Input.is_action_just_pressed("button1"):
 		match progress.gui:
 			0:
@@ -63,6 +68,7 @@ func _process(delta):
 				menu.show()
 				if progress.mousemode == false:
 					Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+					progress.control = false
 				progress.gui = 1
 #				print(thought.leQuestions)
 			1:
@@ -70,6 +76,7 @@ func _process(delta):
 				menu.hide()
 				if progress.mousemode == false:
 					Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+					progress.control = true
 				progress.gui = 0
 			2, 3, 5:
 				questlist.hide()
@@ -79,6 +86,7 @@ func _process(delta):
 				progress.gui = 1
 			4:
 				thought.hide()
+				progress.desc = ""
 				questlist.show()
 				progress.gui = 3
 
@@ -103,9 +111,8 @@ func _process(delta):
 		menu.hide()
 		progress.gui = 5
 
-	player.control = not progress.pause
 	if dialogue.frame.is_visible() == false and clueslist.is_visible() == false:
-		camera.control = player.control
+		camera.control = progress.control
 	else:
 		camera.control = false
 		
@@ -121,6 +128,10 @@ func _process(delta):
 		thought._add_clue()
 		progress.variables["add_clue"] = "false"
 
+	if progress.variables["question"] != null:
+		_add_question(int(progress.variables["question"]))
+		progress.variables["question"] = null
+
 func _thought(qid):
 	progress.gui = 4
 	questlist.hide()
@@ -130,14 +141,52 @@ func _thought(qid):
 
 func _on_Present_button_pressed():
 	var list = $Cluelist/ItemList
-	
 	if list.get_selected_items().size() > 0:
 		var selected = list.get_item_text(list.get_selected_items()[0])
 		if progress.mousemode == false:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		clueslist.hide()
 		$Present_button.hide()
+		# If the npc have dialog for the presented evidence
 		if dialogue.has_block(progress.current_dialogue, selected):
+			# set this variable to true so it gonna save the dialogue into log 
+			progress.present = true
+			# set the variable so later can be known what evidence to use
+			clue = selected
+			# start the dialog
 			dialogue.initiate(progress.current_dialogue, selected)
 		else:
+			# if npc don't have a dialog for evidence start the present dialogue
 			dialogue.initiate(progress.current_dialogue, "present")
+
+func _add_question(id):
+	var question = root.questions[id]
+	thought.leQuestions[qid] = {question = root.questions[qid]["question"], answer = [], raw_answer = ""}
+
+	var button = Button.new()
+	var separator = HSeparator.new()
+
+	button.text = question["question"]
+	button.set_focus_mode(0)
+	button.rect_min_size[1] = 40
+	button.set("custom_fonts/font", outline_big)
+	separator.rect_min_size[1] = 30
+
+	button.connect("pressed", self, "_thought", [qid])
+
+	if qid != 0:
+		buttlist.add_child(separator)
+	buttlist.add_child(button)
+
+	qid += 1
+
+func _presentlog(present_log):
+	# If the evidence don't have a log for that evidence yet create place in the dict
+	if !cluelist[clue]["log"].has(progress.current_dialogue):
+		cluelist[clue]["log"][progress.current_dialogue] = ""
+	# Add the dialogue piece to the log
+	if present_log["type"] == "text":
+		cluelist[clue]["log"][progress.current_dialogue] += present_log["name"] + ": " + present_log["content"] + "\n\n"
+
+func _draw():
+	draw_circle(get_viewport().get_size()/2, 2, Color("ffffff"))

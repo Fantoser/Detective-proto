@@ -1,13 +1,11 @@
 extends Button
 
-# class member variables go here, for example:
-# var a = 2
-# var b = "textvar"
 var ID = 0
 var list = []
 var desc = ""
 var attributes = []
 var active = false
+var person = false
 onready var FollowButt = get_node("../../FollowButt")
 onready var wordlist = get_node("../wordlist")
 onready var progress = PROGRESS
@@ -19,7 +17,7 @@ func _ready():
 func _process(delta):
 		
 	if active == true:
-		self.modulate = Color(1, 0.5, 0.5, 1)
+		self.modulate = Color(0.5, 0.5, 1, 1)
 	else:
 		self.modulate = Color(1, 1, 1, 1)
 		if progress.selected_clue.has("name"):
@@ -32,39 +30,20 @@ func _process(delta):
 	if Input.is_action_just_pressed("mouse_left"):
 		active = false
 		if self.pressed:
-			get_parent().get_parent()._add_text(self.text, self.list)
+			var word = self.text
+			if person == false:
+				word = word.to_lower()
+			get_parent().get_parent().get_parent()._add_text(word, self.list)
 
 	if Input.is_action_just_pressed("mouse_right") and self.pressed:
 		active = true
-		get_parent().get_parent().clue_selected = 1
-		progress.selected_clue["name"]= self.text
+		get_parent().get_parent().get_parent().clue_selected = 1
+		if person == false:
+			progress.selected_clue["name"]= self.text.to_lower()
+		else:
+			progress.selected_clue["name"]= self.text
 		progress.selected_clue["list"] = self.list
-#	# Called every frame. Delta is time since last frame.
-#	# Update game logic here.
-#	pass
-	if _mousein() == true:
-		progress.desc = desc
 
-func _mousein():
-	var mouseX = get_viewport().get_mouse_position()[0]
-	var mouseY = get_viewport().get_mouse_position()[1]
-	var rectX = self.rect_position[0]
-	var rectY = self.rect_position[1]
-	var rectSX = self.rect_size[0]
-	var rectSY = self.rect_size[1]
-	var parentX = self.get_parent().rect_position[0]
-	var parentY = self.get_parent().rect_position[1]
-	var parentSX = self.get_parent().rect_size[0]
-	var parentSY = self.get_parent().rect_size[1]
-	
-	
-#	print("Rect: " + str(self.ID) + ": " + str(rectX + parentX) + ", " + str(rectY + parentY))	
-#	print("Mouse: " + str(get_viewport().get_mouse_position()[0]) + ", " + str(get_viewport().get_mouse_position()[1]))
-	
-	if mouseX > rectX + parentX and mouseX < rectX + rectSX + parentX and mouseY > rectY + parentY and mouseY < rectY + rectSY + parentY:
-		return true
-	else:
-		return false
 #func _pressed():
 ##	if type == "cluebutt":
 ##
@@ -86,3 +65,8 @@ func _mousein():
 #		wordlist.rect_position = Vector2(self.rect_position[0], self.rect_position[1] + self.rect_size[1])
 #		wordlist.rect_size[0] = self.rect_size[0]
 ##	print("Mouse pos: " + str(get_viewport().get_mouse_position()))
+
+
+func _on_Abutt_mouse_entered():
+	if progress.gui == 4:
+		progress.desc = desc

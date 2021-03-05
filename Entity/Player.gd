@@ -12,7 +12,6 @@ var linear_velocity=Vector3()
 var movement_dir = Vector3()
 var trans = Transform()
 
-var control = true
 var max_speed = 2
 var turn_speed = 20
 var accel = 19.0
@@ -39,7 +38,7 @@ onready var animation_mode = animationTree.get("parameters/playback")
 onready var playback = animationTree.get("parameters/StateMachine/playback")
 
 func _ready():
-
+	self.visible = false
 	skel = get_node("Armature/Skeleton")
 	ray = get_node("Armature/Skeleton/RayCast")
 
@@ -88,7 +87,7 @@ func _physics_process(delta):
 
 	var cam_xform = get_node("../Playercam").get_global_transform()
 
-	if control == true:
+	if progress.control == true:
 		if (Input.is_action_pressed("forward")):
 			dir += -cam_xform.basis[2]
 		if (Input.is_action_pressed("backward")):
@@ -178,7 +177,7 @@ func _process(delta):
 #	$Label.text = ik_right_dir
 
 #	$Cube.global_transform.origin = $Armature/Skeleton/BoneAttachment.global_transform.origin
-	
+
 ### RAYCAST ###
 	if ray.is_colliding():
 		progress.current_talkdialogue = ray.get_collider().talk_dialogue

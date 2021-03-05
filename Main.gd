@@ -3,10 +3,10 @@ extends Spatial
 onready var progress = PROGRESS
 onready var player = $Player
 onready var cam = $Playercam
-var questions = [{question = "What?"},{question = "When?"},{question = "Why?"}]
+export var questions = [{question = "", solution = ""}, {question = "", solution = ""}, {question = "", solution = ""}]
 
 func _ready():
-	pass
+	$GUI._add_question(0)
 
 #func load_cutscene(scene):
 #	for character in scene:

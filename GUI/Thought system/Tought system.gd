@@ -3,9 +3,15 @@ extends Node
 export (PackedScene) var Thebutt
 export (PackedScene) var Insertspace
 
+var font_Roboto = load("res://fonts/Roboto.tres")
+var theme_default = load("res://assets/Themes/default.tres")
+var wordstyle = load("res://assets/Themes/wordtheme.tres")
+
+onready var cursor = $labelBucket/LabelPos
+
 var leText = []
 var leQuestions = {}
-var qid:int = 0
+var qid:int = -1
 var listbutts = []
 var activeButton = null
 #var line = 1
@@ -17,35 +23,38 @@ onready var progress = PROGRESS
 
 
 #	Items
-#warning-ignore:unused_class_variable
+
 var small = ["used", "gave", "picked up", "placed", "replaced", "hid", "thrown"]
-#warning-ignore:unused_class_variable
+
 var medium = ["used", "gave", "picked up", "placed", "replaced", "throwed away"]
-#warning-ignore:unused_class_variable
+
+var large = ["used", "tipped over"]
+
 var food = ["ate"]
-#warning-ignore:unused_class_variable
-var cloth = ["put on"]
+
+var fabric = ["put on", "folded"]
 
 #   Weapons
-#warning-ignore:unused_class_variable
+
 var firearm = ["fired", "reloaded", "emptied"]
-#warning-ignore:unused_class_variable
+
 var blunt = ["swinged", "hit", "thrown", "dodged with"]
-#warning-ignore:unused_class_variable
-var pointing = ["stabbed with", "thrown", "dodged with"]
-#warning-ignore:unused_class_variable
+
+var pointing = ["stabbed", "thrown", "dodged with"]
+
 var cutting = ["cut with", "cut trough with", "dodged with"]
 
 #   Places
-#warning-ignore:unused_class_variable
-var room = ["went to", "left", "hid in"]
-#warning-ignore:unused_class_variable
+
+var room = ["went into", "left", "hid in"]
+
 var hallway = ["went to", "left", "hid in", "went trough"]
-#warning-ignore:unused_class_variable
+
 var hiding = ["hid in", "put in", "came out of"]
 
 #   Person
 var person = ["saw", "talked with", "called"]
+var victim = ["saw", "talked with", "called", "ded"]
 
 var afterwords = {
 	thrown = "at",
@@ -55,62 +64,64 @@ var afterwords = {
 	gave = "to",
 	hid = "in",
 	placed = ["on", "in", "next to"],
+	stabbed = "into",
+	picked_up = "from"
 }
 
 var Categories ={ 
 	#	Items
-	small = ["used", "gave", "picked up", "placed", "replaced", "hid", "thrown"],
-	medium = ["used", "gave", "picked up", "placed", "replaced", "throwed away"],
+	small = ["used", "gave", "picked up", "placed", "replaced", "hid", "threw"],
+	medium = ["used", "gave", "picked up", "placed", "replaced", "throwed away", "threw"],
+	large = ["used", "tipped over"],
 	food = ["ate"],
 	cloth = ["put on"],
+	fabric = ["put on", "folded"],
 	
 	#   Weapons
 	firearm = ["fired", "reloaded", "emptied"],
-	blunt = ["swinged", "hit", "thrown", "dodged with"],
-	pointing = ["stabbed with", "thrown", "dodged with"],
+	blunt = ["swinged", "hit", "threw", "dodged with"],
+	pointing = ["stabbed", "threw", "dodged with"],
 	cutting = ["cut with", "cut trough with", "dodged with"],
 	
 	#   Places
-	room = ["went to", "left", "hid in"],
+	room = ["went into", "left", "hid in"],
 	hallway = ["went to", "left", "hid in", "went trough"],
 	hiding = ["hid in", "put in", "came out of"],
 	
 	#   Person
 	person = ["saw", "talked with", "called"],
+	impersonal = ["saw", "talked with", "called"],
 	
-	# Question
+	#   Question
 	where = ["when", "at"],
 	how = ["heard", "saw", "went to", "was in"],
 	why = ["heard", "saw", "went to", "was in"],
 	when = ["heard", "saw", "went to", "was in"],
 	
 	afterwords = {
-		thrown = "at",
+		threw = "at",
 		change = "with",
 		used = "on",
 		replaced = "with",
 		gave = "to",
 		hid = "in",
 		placed = ["on", "in", "next to"],
+		folded = ["around", "in half"],
+		stabbed = "into",
+		picked_up = "from",
+		swinged = "at"
 	}
 }
 
-#warning-ignore:unused_class_variable
-var buttons = [
-["Jack Hammer", [person] ],
-["samurai spear", [medium, pointing] ],
-["samurai costume", [medium, cloth] ],
-["back of studio", [room] ]
-]
-#
 var dicbutt = [
-{word = "Jack Hammer", attributes = [person], desc = "The superstar"},
-{word = "samurai spear", attributes = [medium, pointing], desc = "The murder weapon"},
-{word = "samurai costume", attributes = [medium, cloth], desc = "Found in the trash"},
-{word = "plate", attributes = [small], desc = "A cheap plastic plate"},
-{word = "Sal Manella", attributes =[person], desc = "A nerd"},
-{word = "knife", attributes = [small, pointing, cutting], desc = "A knife stained with barbecue sauce"},
-{word = "living room", attributes = [room], desc = "The living room, where someone dieded. The irony."},
+{word = "The culprit", attributes =["impersonal"], desc = "The person behind the murder"},
+{word = "Eric Calvaire", attributes =["person"], desc = "The vicim"},
+{word = "Lighthouse Candle", attributes = ["small"], desc = "A candle in the shape of a lighthouse."},
+{word = "Sheppard's Lighter", attributes = ["small"], desc = "A lighter using a rope instead of fuel. Found on the ground."},
+{word = "Gas Canister", attributes = ["medium", "blunt"], desc = "An iron casted empty gas canister found on the floor of the office. \n\nThere is a dent on the side."},
+{word = "Ship Model", attributes = ["medium"], desc = "A pretty big ship model, found laying on the victim."},
+{word = "Carpet", attributes = ["medium", "fabric"], desc = "A burned carpet the victim layed on.\n\nHave a strange burn mark."},
+{word = "Long shelf", attributes = ["medium"], desc = "The longest shelf in the room"},
 ]
 
 func _ready():
@@ -118,17 +129,20 @@ func _ready():
 
 	for butt in dicbutt:
 		var cluebutt = Thebutt.instance()
-		$buttBucket.add_child(cluebutt)
+		$Grid/HBoxContainer.add_child(cluebutt)
 
 		cluebutt.text = butt.word
 		cluebutt.enabled_focus_mode = false
+		cluebutt.rect_min_size.x = cluebutt.rect_min_size.x + 10
 
-		cluebutt.desc = progress.desc
+		cluebutt.desc = butt.desc
 		for item in butt["attributes"]:
-			cluebutt.list += item
+			if item == "person":
+				cluebutt.person = true
+			cluebutt.list += Categories[item]
 
-		cluebutt.rect_position = $buttBucket/ButtonPos.get_position()
-		$buttBucket/ButtonPos.position += Vector2(cluebutt.rect_size[0] + 10, 0)
+#		cluebutt.rect_position = $buttBucket/ButtonPos.get_position()
+#		$buttBucket/ButtonPos.position += Vector2(cluebutt.rect_size[0] + 10, 0)
 
 func _setup(id):
 	qid = id
@@ -142,7 +156,7 @@ func _setup(id):
 func _submit():
 	leQuestions[qid]["answer"] = []
 	leQuestions[qid]["raw_answer"] = ""
-	
+
 	for answer in leText:
 		leQuestions[qid]["answer"].append(answer)
 
@@ -162,7 +176,12 @@ func _process(delta):
 	if Input.is_action_just_pressed("mouse_left"):
 		if clue_selected == 1:
 			clue_selected = 2
-	$DescLabel.text = progress.desc
+
+	$DescLabel.set_bbcode(progress.desc.c_unescape())
+
+	if Input.is_action_just_pressed("button3"):
+		print(leText)
+
 
 func _input(event):
    # Mouse in viewport coordinates
@@ -180,19 +199,21 @@ func _add_clue(list = null):
 
 #Check if clue already obtained
 	var doit = true
-	for butt in $buttBucket.get_children():
+	for butt in $Grid/HBoxContainer.get_children():
 		if butt.name != "ButtonPos":
 			if butt.text == word:
 				doit = false
-				get_parent().cluelist[word] += description
+				get_parent().cluelist[word]["description"] += description
 
 #Adding clue
 	if doit == true:
 
-		get_parent().cluelist[word] = description
+		get_parent().cluelist[word] = {}
+		get_parent().cluelist[word]["log"] = {}
+		get_parent().cluelist[word]["description"] = description
 
 		var cluebutt = Thebutt.instance()
-		$buttBucket.add_child(cluebutt)
+		$Grid/HBoxContainer.add_child(cluebutt)
 
 		cluebutt.text = word
 		cluebutt.enabled_focus_mode = false
@@ -202,6 +223,8 @@ func _add_clue(list = null):
 		for item in attributes.split(","):
 			for category in Categories.keys():
 				if str(category) == item:
+					if item == "person":
+						cluebutt.person = true
 					cluebutt.list += Categories[category]
 
 		if $buttBucket/ButtonPos.position[0] + cluebutt.rect_size[0] > get_viewport().size[0] - 300:
@@ -211,20 +234,18 @@ func _add_clue(list = null):
 		$buttBucket/ButtonPos.position += Vector2(cluebutt.rect_size[0] + 10, 0)
 
 func _add_text(new_word, new_list, pos=leText.size()):
-	
+
 	if pos != leText.size():
 		if leText[pos]["type"] == "word":
 			leText.insert(pos, {type = "list", word = "", list = leText[pos]["list"]})
-	
+
 	if leText.size() > 0:
 		if leText[pos-1]["type"] != "afterword":
-#			leText.insert(pos, ["list", "", $FollowButt.list])
 			leText.insert(pos, {type = "list", word = "", list = new_list})
 			pos += 1
 	
 	leText.insert(pos, {type = "word", word = new_word, list = new_list})
 
-	
 	_draw_text()
 
 func _change_text(ID, newText, newList):
@@ -270,19 +291,21 @@ func _draw_text():
 	listbutts = []
 #	var ID = 1
 	var ai = "null"
+	var textObject = ""
+	var andHold = {}
+	var commaCombo = false
 	
 	# KILL (ALMOST) ALL THE CHILD OF LABELBUCKET
 	for child in $labelBucket.get_children():
 		if child.name != "LabelPos" and child.name != "wordlist":
 			child.queue_free()
 
-	$labelBucket/LabelPos.position[0] = 23.755379
-	$labelBucket/LabelPos.position[1] = 15
+	cursor.position[0] = 23.755379
+	cursor.position[1] = 15
 	
 	
 	for i in range(0, leText.size()):
-		
-		
+
 		if i < leText.size()-1:
 			ai = leText[i+1]["type"]
 		
@@ -290,6 +313,7 @@ func _draw_text():
 		if leText[i]["type"] == "list":
 #			var listbutt = Thebutt.instance()
 			var newListButt = Label.new()
+			newListButt.set("theme", theme_default)
 			newListButt.rect_size = Vector2(0, 10)
 			newListButt.set_script(listscript)
 			listbutts.append(newListButt)
@@ -309,16 +333,25 @@ func _draw_text():
 
 		if leText[i]["type"] == "word":
 		# INSERT "THE" BEFORE WORDS
-			if i != 0 and leText[i]["list"] != person:
+			if i != 0 and leText[i]["list"] != person and leText[i]["word"] != textObject:
 				var theLabel = Label.new()
+				theLabel.set("theme", theme_default)
 				theLabel.text = "the"
-				
+				theLabel.theme = wordstyle
 				$labelBucket.add_child(theLabel)
 				_position(theLabel)
 
 		# INSERT WORDS
 			var wordLabel = Label.new()
-			wordLabel.text = leText[i]["word"]
+			# CHECK IF THE OBJECT OF THE SENTENCE IS THE CURRENT WORD
+			# IF YES, IT CHANGE IT TO "IT"
+			if leText[i]["word"] == textObject:
+				wordLabel.text = "it"
+			else:
+				wordLabel.text = leText[i]["word"]
+			if leText[i-1]["type"] != "afterword":
+				textObject = leText[i]["word"]
+			wordLabel.theme = wordstyle
 			wordLabel.set_script(wordscript)
 			wordLabel.ID = i
 			
@@ -326,21 +359,40 @@ func _draw_text():
 			_position(wordLabel)
 			
 	# INSERT COMMA
-		if i != 0 and leText[i-1]["type"] == "list":
-			if afterwords.has(leText[i-1]["word"]) == false and leText[i-1]["word"] != "":
-				if i+1 < leText.size():
-					if leText[i+1]["type"] == "list":
-						var commaLabel = Label.new()
-						commaLabel.text = ","
-						$labelBucket.add_child(commaLabel)
-						$labelBucket/LabelPos.position[0] -= 8
-						_position(commaLabel)
-
+#	Categories["afterwords"].has(leText[i-1]["word"]) == false and 
+		if i != 0 and (leText[i-1]["type"] == "list" or leText[i-1]["type"] == "afterword"):
+			if leText[i-1]["word"] != "" and i+1 < leText.size() and leText[i+1]["type"] == "list":
+				var commaLabel = Label.new()
+				commaLabel.theme = wordstyle
+				commaLabel.text = ","
+				$labelBucket.add_child(commaLabel)
+				_position(commaLabel)
+			# INSERT "AND" AFTER COMMA
+				var andLabel = Label.new()
+				andLabel.theme = wordstyle
+				andLabel.text = "and"
+				$labelBucket.add_child(andLabel)
+				_position(andLabel)
+			# REMOVE PREVIOUS "AND" IF NOT NEEDED
+				if commaCombo == true and andHold != null:
+					andHold["node"].queue_free()
+					cursor.position = andHold["cursor_position"]
+					for label in range(andHold["index"], $labelBucket.get_child_count()):
+						if $labelBucket.get_child(label).name != "wordlist":
+							_position($labelBucket.get_child(label))
+					andHold["node"] = andLabel
+					andHold["index"] = andLabel.get_index()
+					andHold["cursor_position"] = andLabel.rect_position
+				commaCombo = true
+			else:
+				commaCombo = false
+				andHold = null
 
 	# INSERT AFTERWORDS OR AFTERLIST
 		if leText[i]["type"] == "afterword":
 			if leText[i].has("list"):
 				var newListButt = Label.new()
+				newListButt.set("theme", theme_default)
 				newListButt.rect_size = Vector2(0, 10)
 				newListButt.set_script(listscript)
 				listbutts.append(newListButt)
@@ -359,6 +411,7 @@ func _draw_text():
 				_position(newListButt)
 			else:
 				var afterLabel = Label.new()
+				afterLabel.theme = wordstyle
 				afterLabel.text = str(leText[i]["word"])
 	
 				$labelBucket.add_child(afterLabel)
@@ -379,14 +432,17 @@ func _draw_text():
 
 
 func _position(node):
+	if node is Label and node.text == ",":
+		cursor.position[0] -= 8
+	var labelBucket_right = $labelBucket.get("rect_position").x + $labelBucket.get("rect_size").x
 	if node is TextureButton:
-		node.rect_position = $labelBucket/LabelPos.position - Vector2(10, 20)
+		node.rect_position = cursor.position - Vector2(24, 8)
 	else:
-		if $labelBucket/LabelPos.position[0] + node.rect_size[0] > get_viewport().size[0] - 200:
-			$labelBucket/LabelPos.position[0] = 23.755
-			$labelBucket/LabelPos.position[1] += 25
-		node.rect_position = $labelBucket/LabelPos.position
-		$labelBucket/LabelPos.position[0] += node.rect_size[0] + 8
+		if cursor.position[0] + node.get("rect_size").x > $labelBucket.get("rect_size").x:
+			cursor.position[0] = 23.755
+			cursor.position[1] += 25
+		node.rect_position = cursor.position
+		cursor.position[0] += node.rect_size[0] + 8
 
 func _on_wordlist_item_selected(index):
 	
@@ -399,11 +455,12 @@ func _on_wordlist_item_selected(index):
 
 # HANDLE AFTERWORD AND NEXT LIST/AFTERWORD
 	var afterword = ""
-	if afterwords.has($labelBucket/wordlist.get_item_text(index)):
-		afterword = afterwords[$labelBucket/wordlist.get_item_text(index)]
+	var word = $labelBucket/wordlist.get_item_text(index).replace(" ", "_")
+	if Categories["afterwords"].has(word):
+		afterword = Categories["afterwords"][word]
 
 	if activeButton+2 < leText.size():
-		if afterwords.has($labelBucket/wordlist.get_item_text(index)):
+		if Categories["afterwords"].has(word):
 				if leText[activeButton+2]["type"] == "afterword":
 					if typeof(afterword) != 4:
 						leText[activeButton+2]["word"] = ""
@@ -436,7 +493,7 @@ func _on_wordlist_item_selected(index):
 					if leText[activeButton+2]["type"] == "word":
 						leText.insert(activeButton+2, {type = "list", word = "", list = leText[activeButton+2]["list"]})
 	else:
-		if afterwords.has($labelBucket/wordlist.get_item_text(index)):
+		if Categories["afterwords"].has(word):
 			if typeof(afterword) == 4:
 				leText.insert(activeButton+2, {type = "afterword", word = str(afterword)})
 			else:
@@ -444,6 +501,9 @@ func _on_wordlist_item_selected(index):
 
 # PUT BACK LIST
 	$labelBucket/wordlist.rect_position = Vector2(-2000, -2000)
+	$labelBucket/wordlist.clear()
+	$labelBucket/wordlist.set_auto_height(true)
+	$labelBucket/wordlist.rect_size[1] = 0
 		
 	_draw_text()
 

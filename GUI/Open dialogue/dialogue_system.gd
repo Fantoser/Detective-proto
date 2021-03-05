@@ -13,6 +13,7 @@ extends Control
 ## Paths ##
 var dialogues_folder = 'res://dialogues' # Folder where the JSON files will be stored
 var choice_scene = load('res://Choice.tscn') # Base scene for que choices
+onready var gui = get_parent()
 onready var thought = get_node("../Thought system")
 ## Required nodes ##
 onready var frame : Node = $Frame # The container node for the dialogues.
@@ -180,6 +181,7 @@ func set_frame(): # Mostly aligment operations.
 
 func initiate(file_id, block = 'first'): # Load the whole dialogue into a variable
 	id = file_id
+	progress.control = false
 	var file = File.new()
 	file.open('%s/%s.json' % [dialogues_folder, id], file.READ)
 	var json = file.get_as_text()
@@ -233,6 +235,12 @@ func first(block):
 func update_dialogue(step): # step == whole dialogue block
 	clean()
 	current = step
+	print(progress.quote)
+	progress.quote = ""
+	label.endSearch = false
+
+	if progress.present == true:
+		gui._presentlog(step)
 	print("Next")
 	progress.scenestep += 1
 	progress.npc = {}
@@ -298,6 +306,7 @@ func update_dialogue(step): # step == whole dialogue block
 							next_step = step['false']
 					else:
 						next_step = step['false']
+			label.visible_characters = number_characters
 			next()
 			
 		'question': # Moved to question() function to make the code more readable.
@@ -310,9 +319,9 @@ func update_dialogue(step): # step == whole dialogue block
 			number_characters = phrase_raw.length()
 			next_step = step['next'][0]
 			
-		'action':
+		'action', 'random':
 			not_question()
-			
+
 			match step['operation']:
 				'variable':
 					update_variable(step['value'], step['dictionary'])
@@ -417,8 +426,8 @@ func next():
 
 	if next_step == '': # Doesn't have a 'next' block.
 		print("END")
-#		if progress.list["word"] != "":
-#			thought._add_clue(progress.list)
+		progress.control = true
+		progress.present = false
 		if current.has('animation_out'):
 			animate_sprite(current['position'], current['avatar'], current['animation_out'])
 			yield(tween, "tween_completed")
@@ -467,7 +476,8 @@ func check_names(block):
 			name_right.show()
 			name_left.hide()
 	else:
-		pass
+		name_left.hide()
+		name_right.hide()
 
 
 func check_animation(block):

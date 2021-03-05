@@ -13,7 +13,7 @@ export var mouselook = true
 export (float, 0.0, 1.0) var sensitivity = 0.5
 export (float, 0.0, 0.999, 0.001) var smoothness = 0.5 setget set_smoothness
 export(NodePath) var privot setget set_privot
-export var distance = 8 setget set_distance
+export var distance = 0 setget set_distance
 var distance_con = distance
 export var rotate_privot = false
 export var collisions = true setget set_collisions
@@ -51,7 +51,7 @@ var _speed = Vector3(0.0, 0.0, 0.0)
 var _gui
 
 # Modechange variables
-var firstmode = false
+var firstmode = true
 var modechange = false
 var rotate_to
 
@@ -129,14 +129,12 @@ func _process(delta):
 	if modechange == true:
 		if firstmode == true:
 			distance -= zoom_p_second * delta
-#			rotation_degrees[1] += rotate_to * delta
 			if distance <= zoom_p_second * delta:
 				distance = 0
 				modechange = false
 				pitch_limit = 180
 				_pitch = -40
 				player.visible = false
-#				rotate_privot = true
 				
 		if firstmode == false:
 			distance += zoom_p_second * delta

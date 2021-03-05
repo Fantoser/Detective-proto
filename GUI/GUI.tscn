@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=19 format=2]
 
 [ext_resource path="res://GUI/gui.gd" type="Script" id=1]
 [ext_resource path="res://GUI/Open dialogue/Dialogue.tscn" type="PackedScene" id=2]
@@ -8,29 +8,78 @@
 [ext_resource path="res://assets/Espella mugshot.png" type="Texture" id=6]
 [ext_resource path="res://assets/Brentilda mugshot.png" type="Texture" id=7]
 [ext_resource path="res://assets/Hajime mugshot.png" type="Texture" id=8]
+[ext_resource path="res://assets/tablet_screen.png" type="Texture" id=9]
+[ext_resource path="res://assets/tablet.png" type="Texture" id=10]
+[ext_resource path="res://assets/particle.png" type="Texture" id=11]
+[ext_resource path="res://assets/Themes/Outline.tres" type="Theme" id=12]
+[ext_resource path="res://assets/Fonts/Outline_big.tres" type="DynamicFont" id=13]
 
-[sub_resource type="CubeMesh" id=1]
+[sub_resource type="CanvasItemMaterial" id=1]
+light_mode = 2
+particles_animation = true
+particles_anim_h_frames = 1
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id=2]
+offsets = PoolRealArray( 0, 0.12766, 0.893617, 1 )
+colors = PoolColorArray( 0, 0, 0, 0, 0, 0, 0, 1, 0.22, 0.1782, 0.22, 1, 0, 0, 0, 0 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+
+[sub_resource type="ParticlesMaterial" id=4]
+emission_shape = 2
+emission_box_extents = Vector3( 1, 1, 1 )
+flag_disable_z = true
+spread = 180.0
+gravity = Vector3( 0, 0, 0 )
+initial_velocity = 10.0
+orbit_velocity = 0.2
+orbit_velocity_random = 0.43
+scale = 0.3
+color_ramp = SubResource( 3 )
+
+[sub_resource type="CubeMesh" id=5]
 
 [node name="GUI" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -2.56201
-margin_top = -2.16479
-margin_right = -2.56201
-margin_bottom = -2.16479
+theme = ExtResource( 12 )
 script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="tablet" type="Sprite" parent="."]
+position = Vector2( 515.02, 301.989 )
+scale = Vector2( 0.556289, 0.555651 )
+texture = ExtResource( 10 )
+
+[node name="Particles2D" type="Particles2D" parent="tablet"]
+material = SubResource( 1 )
+position = Vector2( -6.16949, 0 )
+scale = Vector2( 42.2493, 31.0029 )
+amount = 30
+lifetime = 4.0
+process_material = SubResource( 4 )
+texture = ExtResource( 11 )
+
+[node name="Light2D" type="Light2D" parent="tablet"]
+position = Vector2( -6.55085, -0.0353067 )
+scale = Vector2( 0.649392, 0.648982 )
+texture = ExtResource( 9 )
+texture_scale = 1.54
+mode = 2
+
 [node name="Dialogue" parent="." instance=ExtResource( 2 )]
 
 [node name="Menu" type="Control" parent="."]
-visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 
 [node name="ColorRect2" type="ColorRect" parent="Menu"]
+visible = false
 margin_left = 206.0
 margin_top = 174.679
 margin_right = 816.0
@@ -44,8 +93,12 @@ margin_right = 793.0
 margin_bottom = 240.679
 rect_min_size = Vector2( 0, 46 )
 focus_mode = 0
+custom_fonts/font = ExtResource( 13 )
 enabled_focus_mode = 0
-text = "CLUES"
+text = "EVIDENCES"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Questionsbutt" type="Button" parent="Menu"]
 margin_left = 232.0
@@ -54,6 +107,7 @@ margin_right = 793.0
 margin_bottom = 309.68
 rect_min_size = Vector2( 0, 46 )
 focus_mode = 0
+custom_fonts/font = ExtResource( 13 )
 enabled_focus_mode = 0
 text = "QUESTIONS"
 
@@ -64,6 +118,7 @@ margin_right = 793.0
 margin_bottom = 379.769
 rect_min_size = Vector2( 0, 46 )
 focus_mode = 0
+custom_fonts/font = ExtResource( 13 )
 enabled_focus_mode = 0
 text = "INDICT"
 
@@ -71,6 +126,7 @@ text = "INDICT"
 visible = false
 
 [node name="Cluelist" type="Control" parent="."]
+visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 script = ExtResource( 4 )
@@ -79,14 +135,17 @@ script = ExtResource( 4 )
 margin_left = 140.0
 margin_top = 67.0
 margin_right = 881.0
-margin_bottom = 530.0
+margin_bottom = 352.0
 color = Color( 0.109804, 0.105882, 0.12549, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ItemList" type="ItemList" parent="Cluelist"]
 margin_left = 161.0
 margin_top = 93.0
-margin_right = 435.0
-margin_bottom = 450.0
+margin_right = 385.0
+margin_bottom = 325.0
 focus_mode = 0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -96,11 +155,39 @@ __meta__ = {
 margin_left = 458.0
 margin_top = 94.0
 margin_right = 859.0
-margin_bottom = 452.0
+margin_bottom = 328.0
 bbcode_enabled = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="TabContainer" type="TabContainer" parent="Cluelist"]
+margin_left = 144.0
+margin_top = 373.943
+margin_right = 880.0
+margin_bottom = 583.943
+tab_align = 0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Julia Fang" type="VBoxContainer" parent="Cluelist/TabContainer"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = 32.0
+margin_right = -4.0
+margin_bottom = -4.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Log" type="RichTextLabel" parent="Cluelist/TabContainer/Julia Fang"]
+margin_right = 728.0
+margin_bottom = 174.0
+rect_min_size = Vector2( 0, 150 )
+size_flags_horizontal = 3
+size_flags_vertical = 3
+bbcode_enabled = true
 
 [node name="QuestionList" type="Control" parent="."]
 visible = false
@@ -108,6 +195,7 @@ margin_right = 40.0
 margin_bottom = 40.0
 
 [node name="ColorRect" type="ColorRect" parent="QuestionList"]
+visible = false
 margin_left = 64.0
 margin_top = 66.0
 margin_right = 960.0
@@ -179,6 +267,7 @@ margin_right = 435.0
 margin_bottom = 491.0
 
 [node name="fps_label" type="Label" parent="."]
+visible = false
 margin_left = 4.0
 margin_top = 3.0
 margin_right = 44.0
@@ -190,13 +279,16 @@ __meta__ = {
 [node name="Present_button" type="Button" parent="."]
 visible = false
 margin_left = 716.0
-margin_top = 469.331
+margin_top = 282.652
 margin_right = 853.0
-margin_bottom = 518.331
+margin_bottom = 331.652
 focus_mode = 0
 shortcut_in_tooltip = false
 enabled_focus_mode = 0
 text = "PRESENT"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="Indict" type="Control" parent="."]
 visible = false
@@ -275,7 +367,7 @@ own_world = true
 transparent_bg = true
 
 [node name="MeshInstance" type="MeshInstance" parent="Viewport"]
-mesh = SubResource( 1 )
+mesh = SubResource( 5 )
 material/0 = null
 [connection signal="visibility_changed" from="Cluelist" to="Cluelist" method="_on_Cluelist_visibility_changed"]
 [connection signal="item_selected" from="Cluelist/ItemList" to="Cluelist" method="_on_ItemList_item_selected"]

@@ -6,13 +6,11 @@ onready var root = self.get_parent().get_parent()
 onready var progress = PROGRESS
 var ID = 0
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	rectsize = self.rect_size
 	rectpos = self.get_global_position()
 	self.visible = false
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	if rectpos != self.get_global_position():
 		rectpos = self.get_global_position()
