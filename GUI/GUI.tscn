@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://GUI/gui.gd" type="Script" id=1]
 [ext_resource path="res://GUI/Open dialogue/Dialogue.tscn" type="PackedScene" id=2]
@@ -13,6 +13,7 @@
 [ext_resource path="res://assets/particle.png" type="Texture" id=11]
 [ext_resource path="res://assets/Themes/Outline.tres" type="Theme" id=12]
 [ext_resource path="res://assets/Fonts/Outline_big.tres" type="DynamicFont" id=13]
+[ext_resource path="res://assets/Themes/default2.tres" type="Theme" id=14]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 light_mode = 2
@@ -52,6 +53,7 @@ __meta__ = {
 }
 
 [node name="tablet" type="Sprite" parent="."]
+visible = false
 position = Vector2( 515.02, 301.989 )
 scale = Vector2( 0.556289, 0.555651 )
 texture = ExtResource( 10 )
@@ -72,9 +74,53 @@ texture = ExtResource( 9 )
 texture_scale = 1.54
 mode = 2
 
+[node name="Evidence question" type="Control" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 14 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="Evidence question"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.403922 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="Evidence question"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -111.5
+margin_top = -19.0
+margin_right = 175.5
+margin_bottom = 19.0
+custom_fonts/font = ExtResource( 13 )
+text = "The candle was ____"
+align = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="AnswerBucket" type="GridContainer" parent="Evidence question"]
+margin_left = 42.0
+margin_top = 373.0
+margin_right = 981.0
+margin_bottom = 562.0
+columns = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="Dialogue" parent="." instance=ExtResource( 2 )]
 
 [node name="Menu" type="Control" parent="."]
+visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 
@@ -130,6 +176,9 @@ visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 script = ExtResource( 4 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ColorRect" type="ColorRect" parent="Cluelist"]
 margin_left = 140.0
@@ -190,7 +239,6 @@ size_flags_vertical = 3
 bbcode_enabled = true
 
 [node name="QuestionList" type="Control" parent="."]
-visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 
@@ -203,10 +251,11 @@ margin_bottom = 530.0
 color = Color( 0.109804, 0.105882, 0.12549, 1 )
 
 [node name="QuestButtList" type="VBoxContainer" parent="QuestionList"]
-margin_left = 236.0
+margin_left = 185.0
 margin_top = 105.0
-margin_right = 787.0
+margin_right = 842.0
 margin_bottom = 504.0
+alignment = 1
 __meta__ = {
 "_edit_use_anchors_": false
 }

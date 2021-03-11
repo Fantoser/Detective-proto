@@ -9,6 +9,8 @@ var wordstyle = load("res://assets/Themes/wordtheme.tres")
 
 onready var cursor = $labelBucket/LabelPos
 
+var cursor_starting_x = 7.54
+
 var leText = []
 var leQuestions = {}
 var qid:int = -1
@@ -79,7 +81,7 @@ var Categories ={
 	
 	#   Weapons
 	firearm = ["fired", "reloaded", "emptied"],
-	blunt = ["swinged", "hit", "threw", "dodged with"],
+	blunt = ["swinged", "hit with", "threw", "dodged with"],
 	pointing = ["stabbed", "threw", "dodged with"],
 	cutting = ["cut with", "cut trough with", "dodged with"],
 	
@@ -109,12 +111,13 @@ var Categories ={
 		folded = ["around", "in half"],
 		stabbed = "into",
 		picked_up = "from",
-		swinged = "at"
+		swinged = "at",
+		hit_with = ""
 	}
 }
 
 var dicbutt = [
-{word = "The culprit", attributes =["impersonal"], desc = "The person behind the murder"},
+{word = "kek_The culprit", attributes =["impersonal"], desc = "The person behind the murder"},
 {word = "Eric Calvaire", attributes =["person"], desc = "The vicim"},
 {word = "Lighthouse Candle", attributes = ["small"], desc = "A candle in the shape of a lighthouse."},
 {word = "Sheppard's Lighter", attributes = ["small"], desc = "A lighter using a rope instead of fuel. Found on the ground."},
@@ -122,6 +125,7 @@ var dicbutt = [
 {word = "Ship Model", attributes = ["medium"], desc = "A pretty big ship model, found laying on the victim."},
 {word = "Carpet", attributes = ["medium", "fabric"], desc = "A burned carpet the victim layed on.\n\nHave a strange burn mark."},
 {word = "Long shelf", attributes = ["medium"], desc = "The longest shelf in the room"},
+{word = "Knife", attributes = ["small", "cutting", "pointing"], desc = "Stabby stabby"}
 ]
 
 func _ready():
@@ -131,7 +135,7 @@ func _ready():
 		var cluebutt = Thebutt.instance()
 		$Grid/HBoxContainer.add_child(cluebutt)
 
-		cluebutt.text = butt.word
+		cluebutt.word = butt.word
 		cluebutt.enabled_focus_mode = false
 		cluebutt.rect_min_size.x = cluebutt.rect_min_size.x + 10
 
@@ -169,7 +173,6 @@ func _submit():
 	leQuestions[qid]["raw_answer"] = leQuestions[qid]["raw_answer"].substr(1, leQuestions[qid]["raw_answer"].length())
 	$CurrentLabel.text = leQuestions[qid]["raw_answer"]
 
-
 func _process(delta):
 	if clue_selected == 2:
 		clue_selected = 0
@@ -182,6 +185,11 @@ func _process(delta):
 	if Input.is_action_just_pressed("button3"):
 		print(leText)
 
+	if progress.variables["word"] != "":
+		_add_clue()
+
+	if progress.variables["evidenceQuestion"] != "":
+		_add_assumed_evidence()
 
 func _input(event):
    # Mouse in viewport coordinates
@@ -193,29 +201,58 @@ func _add_clue(list = null):
 	var word = progress.variables["word"]
 	var description = progress.variables["desc"]
 	var attributes = progress.variables["atrbs"]
-	progress.variables["word"] = ""
-	progress.variables["desc"] = ""
-	progress.variables["atrbs"] = ""
 
 #Check if clue already obtained
 	var doit = true
 	for butt in $Grid/HBoxContainer.get_children():
 		if butt.name != "ButtonPos":
-			if butt.text == word:
+			if "_" in butt.word:
+				if butt.word.split("_")[0] == word.split("_")[0]:
+					doit = false
+					get_parent().cluelist.erase(butt.word)
+					butt.word = word
+					butt.desc = description
+					butt.list = []
+					get_parent().cluelist[word] = {}
+					get_parent().cluelist[word]["word"] = word.split("_")[1]
+					get_parent().cluelist[word]["log"] = {}
+					get_parent().cluelist[word]["description"] = description
+					for item in attributes.split(","):
+						for category in Categories.keys():
+							if str(category) == item:
+								if item == "person":
+									butt.person = true
+								butt.list += Categories[category]
+					break
+			if butt.word == word:
 				doit = false
 				get_parent().cluelist[word]["description"] += description
+
+	progress.variables["word"] = ""
+	progress.variables["desc"] = ""
+	progress.variables["atrbs"] = ""
 
 #Adding clue
 	if doit == true:
 
+		var textWord
+
+		if "_" in word:
+			textWord = word.split("_")[1]
+		else:
+			textWord = word
+
 		get_parent().cluelist[word] = {}
+		get_parent().cluelist[word]["word"] = textWord
 		get_parent().cluelist[word]["log"] = {}
 		get_parent().cluelist[word]["description"] = description
+
+
 
 		var cluebutt = Thebutt.instance()
 		$Grid/HBoxContainer.add_child(cluebutt)
 
-		cluebutt.text = word
+		cluebutt.word = word
 		cluebutt.enabled_focus_mode = false
 
 		cluebutt.desc = description
@@ -284,23 +321,25 @@ func _remove_text(ID):
 			leText.remove(ID-1)
 			
 	_draw_text()
-	
+
+func _add_assumed_evidence():
+	pass
+
 func _draw_text():
 
 	
 	listbutts = []
-#	var ID = 1
 	var ai = "null"
 	var textObject = ""
 	var andHold = {}
 	var commaCombo = false
-	
+
 	# KILL (ALMOST) ALL THE CHILD OF LABELBUCKET
 	for child in $labelBucket.get_children():
 		if child.name != "LabelPos" and child.name != "wordlist":
 			child.queue_free()
 
-	cursor.position[0] = 23.755379
+	cursor.position[0] = cursor_starting_x
 	cursor.position[1] = 15
 	
 	
@@ -308,10 +347,9 @@ func _draw_text():
 
 		if i < leText.size()-1:
 			ai = leText[i+1]["type"]
-		
+
 	# INSERT LISTBUTTONS
 		if leText[i]["type"] == "list":
-#			var listbutt = Thebutt.instance()
 			var newListButt = Label.new()
 			newListButt.set("theme", theme_default)
 			newListButt.rect_size = Vector2(0, 10)
@@ -326,22 +364,26 @@ func _draw_text():
 				newListButt.text = leText[i]["word"]
 			else:
 				newListButt.text = "SELECT"
-				
 			$labelBucket.add_child(newListButt)
-				
 			_position(newListButt)
 
-		if leText[i]["type"] == "word":
 		# INSERT "THE" BEFORE WORDS
-			if i != 0 and leText[i]["list"] != person and leText[i]["word"] != textObject:
+		if leText[i]["type"] == "word":
+			if !leText[i]["word"].begins_with("the") and leText[i]["list"] != person and leText[i]["word"] != textObject:
 				var theLabel = Label.new()
 				theLabel.set("theme", theme_default)
-				theLabel.text = "the"
+				if i == 0:
+					theLabel.text = "The"
+				else:
+					theLabel.text = "the"
 				theLabel.theme = wordstyle
 				$labelBucket.add_child(theLabel)
 				_position(theLabel)
+		# IF NO "THE" PUT BEFORE THE WORD BUT THIS IS THE FIRST WORD UPPERCASE FIRST LETTER
+			elif i == 0:
+				leText[i]["word"] = leText[i]["word"][0].to_upper() + leText[i]["word"].substr(1, -1)
 
-		# INSERT WORDS
+		# INSERT WORD
 			var wordLabel = Label.new()
 			# CHECK IF THE OBJECT OF THE SENTENCE IS THE CURRENT WORD
 			# IF YES, IT CHANGE IT TO "IT"
@@ -359,7 +401,6 @@ func _draw_text():
 			_position(wordLabel)
 			
 	# INSERT COMMA
-#	Categories["afterwords"].has(leText[i-1]["word"]) == false and 
 		if i != 0 and (leText[i-1]["type"] == "list" or leText[i-1]["type"] == "afterword"):
 			if leText[i-1]["word"] != "" and i+1 < leText.size() and leText[i+1]["type"] == "list":
 				var commaLabel = Label.new()
@@ -432,14 +473,14 @@ func _draw_text():
 
 
 func _position(node):
-	if node is Label and node.text == ",":
+	if node is Label and (node.text == "," or node.text == ""):
 		cursor.position[0] -= 8
 	var labelBucket_right = $labelBucket.get("rect_position").x + $labelBucket.get("rect_size").x
 	if node is TextureButton:
 		node.rect_position = cursor.position - Vector2(24, 8)
 	else:
 		if cursor.position[0] + node.get("rect_size").x > $labelBucket.get("rect_size").x:
-			cursor.position[0] = 23.755
+			cursor.position[0] = cursor_starting_x
 			cursor.position[1] += 25
 		node.rect_position = cursor.position
 		cursor.position[0] += node.rect_size[0] + 8

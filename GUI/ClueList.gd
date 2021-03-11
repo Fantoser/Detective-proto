@@ -10,11 +10,15 @@ func _makelist():
 	
 	list.clear()
 	
-	for item in gui.cluelist.keys():
-		list.add_item(item)
+	for id in gui.cluelist:
+		list.add_item(gui.cluelist[id]["word"])
 
 func _on_ItemList_item_selected(index):
-	var selected = list.get_item_text(index)
+	var selected
+	
+	for id in gui.cluelist:
+		if gui.cluelist[id]["word"] == list.get_item_text(index):
+			selected = id
 	
 	desc.set_bbcode(gui.cluelist[selected]["description"].c_unescape())
 	

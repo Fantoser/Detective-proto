@@ -7,6 +7,7 @@ export var questions = [{question = "", solution = ""}, {question = "", solution
 
 func _ready():
 	$GUI._add_question(0)
+	$GUI._add_question(1)
 
 #func load_cutscene(scene):
 #	for character in scene:

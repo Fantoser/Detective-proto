@@ -63,8 +63,8 @@ extents = Vector2( 33.3413, 32.2846 )
 [node name="Thought system" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = -0.0991821
-margin_right = -0.0991821
+margin_left = -0.396484
+margin_right = -0.396484
 theme = ExtResource( 5 )
 script = ExtResource( 1 )
 __meta__ = {
@@ -88,7 +88,7 @@ __meta__ = {
 margin_left = 183.0
 margin_top = 128.0
 margin_right = 433.0
-margin_bottom = 306.0
+margin_bottom = 311.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0.6, 0.6, 0.6, 0.196078 )
@@ -100,7 +100,7 @@ __meta__ = {
 margin_left = 445.0
 margin_top = 128.0
 margin_right = 843.0
-margin_bottom = 306.0
+margin_bottom = 311.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 color = Color( 0.6, 0.6, 0.6, 0.196078 )
@@ -148,7 +148,7 @@ __meta__ = {
 margin_left = 183.0
 margin_top = 128.0
 margin_right = 433.0
-margin_bottom = 306.0
+margin_bottom = 311.0
 theme = ExtResource( 4 )
 scroll_horizontal_enabled = false
 __meta__ = {
@@ -163,7 +163,7 @@ size_flags_horizontal = 3
 margin_left = 458.0
 margin_top = 140.0
 margin_right = 830.0
-margin_bottom = 295.0
+margin_bottom = 311.0
 theme = ExtResource( 4 )
 bbcode_enabled = true
 __meta__ = {
@@ -221,7 +221,7 @@ __meta__ = {
 [node name="labelBucket" type="Control" parent="."]
 margin_left = 183.0
 margin_top = 322.0
-margin_right = 832.0
+margin_right = 836.0
 margin_bottom = 405.0
 __meta__ = {
 "_edit_use_anchors_": false
@@ -246,7 +246,7 @@ __meta__ = {
 }
 
 [node name="LabelPos" type="Position2D" parent="labelBucket"]
-position = Vector2( 12, 7.452 )
+position = Vector2( 7.54047, 7.452 )
 
 [node name="WordDrop" type="Area2D" parent="."]
 visible = false

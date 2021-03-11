@@ -2,6 +2,7 @@ extends Button
 
 var ID = 0
 var list = []
+var word = ""
 var desc = ""
 var attributes = []
 var active = false
@@ -43,6 +44,13 @@ func _process(delta):
 		else:
 			progress.selected_clue["name"]= self.text
 		progress.selected_clue["list"] = self.list
+
+	if "_" in word:
+		if self.text != word.split("_")[1]:
+			self.text = word.split("_")[1]
+	else:
+		if self.text != word:
+			self.text = word
 
 #func _pressed():
 ##	if type == "cluebutt":

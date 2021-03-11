@@ -14,7 +14,9 @@ var variables = { # Variables used as conditions to know what dialogue block the
 	list = [],
 	present = "false",
 	add_clue = "false",
-	question =   null
+	question =   null,
+	evidenceQuestion = "",
+	evidenceAnswers = ""
 	}
 
 var evidences = { # Evidences already found

@@ -9,10 +9,12 @@ Repository: https://bitbucket.org/jsena42/godot-open-dialogue/
 
 extends Control
 
+var outline_big = load("res://assets/Fonts/Outline_big.tres")
+
 ##### SETUP #####
 ## Paths ##
 var dialogues_folder = 'res://dialogues' # Folder where the JSON files will be stored
-var choice_scene = load('res://Choice.tscn') # Base scene for que choices
+var choice_scene = load('res://GUI/Open dialogue/Choice.tscn') # Base scene for que choices
 onready var gui = get_parent()
 onready var thought = get_node("../Thought system")
 ## Required nodes ##
@@ -26,6 +28,7 @@ onready var sprite_left : Node = $SpriteLeft # Used for showing the avatar on th
 onready var sprite_right : Node = $SpriteRight
 onready var name_left : Node = $Frame/NameLeft
 onready var name_right : Node = $Frame/NameRight
+onready var choice_cursor: Node = $Frame/Choice_cursor
 ## Typewriter effect ##
 var wait_time : float = 0.02 # Time interval (in seconds) for the typewriter effect. Set to 0 to disable it. 
 var pause_time : float = 2.0 # Duration of each pause when the typewriter effect is active.
@@ -34,7 +37,8 @@ var newline_char : String = '@' # The character used in the JSON file to break l
 ## Other customization options ##
 onready var progress = PROGRESS # The AutoLoad script where the interaction log, quest variables, inventory and other useful data should be acessible.
 var dialogues_dict = 'dialogues' # The dictionary on 'progress' used to keep track of interactions.
-var choice_plus_y : int = 2 # How much space (in pixels) should be added between the choices (affected by 'choice_height').
+var choice_plus_y : int = 0 # How much space (in pixels) should be added between the choices (affected by 'choice_height').
+var choice_plus_x : int = 20
 var active_choice : Color = Color(1.0, 1.0, 1.0, 1.0)
 var inactive_choice : Color = Color(1.0, 1.0, 1.0, 0.4)
 var choice_height : int = 20 # Choice label's height
@@ -215,6 +219,7 @@ func clean(): # Resets some variables to prevent errors.
 
 func not_question():
 	is_question = false
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
 
 func first(block):
@@ -310,10 +315,10 @@ func update_dialogue(step): # step == whole dialogue block
 			next()
 			
 		'question': # Moved to question() function to make the code more readable.
-			label.bbcode_text = step['text']
-			question(step['text'], step['options'], step['next'])
+			label.bbcode_text = step['content']
+			question(step['content'], step['options'], step['next'])
 			check_newlines(phrase_raw)
-			clean_bbcode(step['text'])
+			clean_bbcode(step['content'])
 			check_animation(step)
 			check_names(step)
 			number_characters = phrase_raw.length()
@@ -351,7 +356,7 @@ func update_dialogue(step): # step == whole dialogue block
 	elif enable_continue_indicator: # If typewriter effect is disabled check if the ContinueIndicator should be displayed
 		continue_indicator.show()
 		animations.play('Continue_Indicator')
-	emit_signal("dialogue_progress")
+#	emit_signal("dialogue_progress")
 
 
 func check_pauses(string):
@@ -420,9 +425,6 @@ func next():
 			return # Stop the function here.
 	else: # The typewriter effect is disabled so we need to make sure the text is fully displayed.
 		label.visible_characters = -1 # -1 tells the RichTextLabel to show all the characters.
-
-	if progress.variables["word"] != "":
-		thought._add_clue()
 
 	if next_step == '': # Doesn't have a 'next' block.
 		print("END")
@@ -660,7 +662,7 @@ func load_image(sprite, image):
 	sprite.texture = load('%s/%s' % [characters_folder, image])
 
 
-func question(text, options, next):
+func question_old(text, options, next):
 	check_pauses(label.get_text())
 	var n = 0 # Just a looping var.
 	var choice_node_align_x = 0
@@ -669,6 +671,9 @@ func question(text, options, next):
 		choice_node_align_x = frame_width - (choice_width + label_margin + choice_margin_horizontal)
 	else:
 		choice_node_align_x = label_margin + choice_margin_horizontal
+	
+#	choices.rect_position = Vector2(choice_node_align_x + (choice_width + choice_plus_x) * options.size(),
+#			frame_height - ((choice_height + choice_plus_y) + label_margin + choice_margin_vertical))
 	
 	choices.rect_position = Vector2(choice_node_align_x,
 			frame_height - ((choice_height + choice_plus_y) * options.size() + label_margin + choice_margin_vertical))
@@ -691,8 +696,37 @@ func question(text, options, next):
 		n += 1
 	
 	is_question = true
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	number_choices = choices.get_child_count() - 1
 
+func question(text, options, next):
+
+#	choice_cursor.position = Vector2(OS.window_size.x/2, OS.window_size.y/2)
+	choice_cursor.position = Vector2(0, 0)
+
+	for i in range(options.size()):
+		var a = options[i]
+		var optionButton = Button.new()
+		optionButton.text = a
+		optionButton.set("custom_fonts/font", outline_big)
+		optionButton.set("enabled_focus_mode", 0)
+		optionButton.rect_size.x += 5
+		optionButton.connect("button_up", self, "choice_made", [next[i]] )
+		choices.add_child(optionButton)
+#		optionButton.rect_position.y -= 80
+
+	for id in range(0, choices.get_child_count()):
+		var option = choices.get_child(id)
+		if id == 0:
+			choice_cursor.position -= Vector2(option.rect_size.x, 0)
+		option.rect_position = choice_cursor.position - Vector2(0, 90)
+		choice_cursor.position.x += option.rect_size.x + choice_plus_x
+	is_question = true
+	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+
+func choice_made(next):
+	next_step = next
+	next()
 
 func change_choice(dir):
 	if is_question:
@@ -754,7 +788,6 @@ func _on_Timer_timeout():
 				label.visible_characters += 1
 		else: # Phrase doesn't have any pauses.
 			label.visible_characters += 1
-		
 		timer.start()
 	else:
 		if is_question:

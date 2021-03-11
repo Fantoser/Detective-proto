@@ -167,7 +167,7 @@ func _process(delta):
 	if Input.is_action_just_pressed("mouse_left"):
 		if textbox.dialogue == null and progress.current_dialogue != "" and clueslist.is_visible() == false:
 			textbox.initiate(progress.current_dialogue, progress.dialogue_start)
-		else:
+		elif textbox.is_question == false:
 			textbox.next()
 
 	if Input.is_action_just_pressed("mouse_right"):

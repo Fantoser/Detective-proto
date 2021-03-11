@@ -66,6 +66,9 @@ margin_top = -60.0
 margin_right = 160.0
 margin_bottom = 60.0
 color = Color( 0.175781, 0.175781, 0.175781, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="RichTextLabel" type="RichTextLabel" parent="Frame"]
 anchor_left = 0.5
@@ -88,7 +91,16 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="Choice_cursor" type="Position2D" parent="Frame"]
+
 [node name="Choices" type="Control" parent="Frame"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -160.0
+margin_right = 160.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="NameRight" type="Label" parent="Frame"]
 anchor_left = 1.0
@@ -118,5 +130,6 @@ __meta__ = {
 }
 
 [node name="ContinueIndicator" type="ColorRect" parent="."]
+self_modulate = Color( 1, 1, 1, 0.5 )
 margin_right = 10.0
 margin_bottom = 10.0
