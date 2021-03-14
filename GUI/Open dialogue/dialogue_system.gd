@@ -719,7 +719,7 @@ func question(text, options, next):
 		var option = choices.get_child(id)
 		if id == 0:
 			choice_cursor.position -= Vector2(option.rect_size.x, 0)
-		option.rect_position = choice_cursor.position - Vector2(0, 90)
+		option.rect_position = choice_cursor.position + Vector2(0, 50)
 		choice_cursor.position.x += option.rect_size.x + choice_plus_x
 	is_question = true
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)

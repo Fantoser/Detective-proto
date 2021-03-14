@@ -11,7 +11,6 @@
 [ext_resource path="res://assets/tablet_screen.png" type="Texture" id=9]
 [ext_resource path="res://assets/tablet.png" type="Texture" id=10]
 [ext_resource path="res://assets/particle.png" type="Texture" id=11]
-[ext_resource path="res://assets/Themes/Outline.tres" type="Theme" id=12]
 [ext_resource path="res://assets/Fonts/Outline_big.tres" type="DynamicFont" id=13]
 [ext_resource path="res://assets/Themes/default2.tres" type="Theme" id=14]
 
@@ -41,15 +40,20 @@ orbit_velocity_random = 0.43
 scale = 0.3
 color_ramp = SubResource( 3 )
 
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
+
 [sub_resource type="CubeMesh" id=5]
 
 [node name="GUI" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-theme = ExtResource( 12 )
+theme = ExtResource( 14 )
 script = ExtResource( 1 )
 __meta__ = {
-"_edit_use_anchors_": false
+"_edit_horizontal_guides_": [ 538.008, 67.0078 ],
+"_edit_use_anchors_": false,
+"_edit_vertical_guides_": [ 183.001, 843.008 ]
 }
 
 [node name="tablet" type="Sprite" parent="."]
@@ -172,7 +176,6 @@ text = "INDICT"
 visible = false
 
 [node name="Cluelist" type="Control" parent="."]
-visible = false
 margin_right = 40.0
 margin_bottom = 40.0
 script = ExtResource( 4 )
@@ -181,66 +184,66 @@ __meta__ = {
 }
 
 [node name="ColorRect" type="ColorRect" parent="Cluelist"]
-margin_left = 140.0
-margin_top = 67.0
-margin_right = 881.0
-margin_bottom = 352.0
-color = Color( 0.109804, 0.105882, 0.12549, 1 )
+margin_left = 423.0
+margin_top = 68.0
+margin_right = 842.0
+margin_bottom = 329.0
+color = Color( 0.6, 0.6, 0.6, 0.196078 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect2" type="ColorRect" parent="Cluelist"]
+margin_left = 184.0
+margin_top = 68.0
+margin_right = 408.0
+margin_bottom = 329.0
+color = Color( 0.6, 0.6, 0.6, 0.196078 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="ItemList" type="ItemList" parent="Cluelist"]
-margin_left = 161.0
-margin_top = 93.0
-margin_right = 385.0
-margin_bottom = 325.0
+margin_left = 196.0
+margin_top = 68.0
+margin_right = 399.0
+margin_bottom = 328.0
 focus_mode = 0
+custom_styles/bg_focus = SubResource( 6 )
+custom_styles/bg = SubResource( 6 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="DescLabel" type="RichTextLabel" parent="Cluelist"]
-margin_left = 458.0
-margin_top = 94.0
-margin_right = 859.0
-margin_bottom = 328.0
+margin_left = 441.0
+margin_top = 87.0
+margin_right = 823.0
+margin_bottom = 310.0
+custom_styles/focus = SubResource( 6 )
+custom_styles/normal = SubResource( 6 )
 bbcode_enabled = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="TabContainer" type="TabContainer" parent="Cluelist"]
-margin_left = 144.0
-margin_top = 373.943
-margin_right = 880.0
-margin_bottom = 583.943
+[node name="LogContainer" type="TabContainer" parent="Cluelist"]
+margin_left = 184.0
+margin_top = 341.0
+margin_right = 843.0
+margin_bottom = 539.0
 tab_align = 0
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Julia Fang" type="VBoxContainer" parent="Cluelist/TabContainer"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_left = 4.0
-margin_top = 32.0
-margin_right = -4.0
-margin_bottom = -4.0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Log" type="RichTextLabel" parent="Cluelist/TabContainer/Julia Fang"]
-margin_right = 728.0
-margin_bottom = 174.0
-rect_min_size = Vector2( 0, 150 )
-size_flags_horizontal = 3
-size_flags_vertical = 3
-bbcode_enabled = true
-
 [node name="QuestionList" type="Control" parent="."]
+visible = false
 margin_right = 40.0
 margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ColorRect" type="ColorRect" parent="QuestionList"]
 visible = false
@@ -327,10 +330,10 @@ __meta__ = {
 
 [node name="Present_button" type="Button" parent="."]
 visible = false
-margin_left = 716.0
-margin_top = 282.652
-margin_right = 853.0
-margin_bottom = 331.652
+margin_left = 690.773
+margin_top = 270.039
+margin_right = 827.773
+margin_bottom = 319.039
 focus_mode = 0
 shortcut_in_tooltip = false
 enabled_focus_mode = 0

@@ -7,6 +7,7 @@ var font_Roboto = load("res://fonts/Roboto.tres")
 var theme_default = load("res://assets/Themes/default.tres")
 var wordstyle = load("res://assets/Themes/wordtheme.tres")
 
+onready var progress = PROGRESS
 onready var cursor = $labelBucket/LabelPos
 
 var cursor_starting_x = 7.54
@@ -21,7 +22,6 @@ var clue_selected = 0
 var desc = ""
 var listscript = preload("res://GUI/Thought system/Listbutt.gd")
 var wordscript = preload("res://GUI/Thought system/Wordbutt.gd")
-onready var progress = PROGRESS
 
 
 #	Items
@@ -138,6 +138,14 @@ func _ready():
 		cluebutt.word = butt.word
 		cluebutt.enabled_focus_mode = false
 		cluebutt.rect_min_size.x = cluebutt.rect_min_size.x + 10
+
+		get_parent().cluelist[butt.word] = {}
+		if "_" in butt.word:
+			get_parent().cluelist[butt.word]["word"] = butt.word.split("_")[1]
+		else:
+			get_parent().cluelist[butt.word]["word"] = butt.word
+		get_parent().cluelist[butt.word]["log"] = {}
+		get_parent().cluelist[butt.word]["description"] = butt.desc
 
 		cluebutt.desc = butt.desc
 		for item in butt["attributes"]:

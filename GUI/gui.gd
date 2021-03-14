@@ -119,6 +119,7 @@ func _process(delta):
 	if progress.variables["present"] == "true":
 		clueslist._makelist()
 		clueslist.show()
+		progress.pause = true
 		$Present_button.show()
 		if progress.mousemode == false:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -147,10 +148,30 @@ func _on_Present_button_pressed():
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 		clueslist.hide()
 		$Present_button.hide()
+		progress.pause = false
 		# If the npc have dialog for the presented evidence
 		if dialogue.has_block(progress.current_dialogue, selected):
 			# set this variable to true so it gonna save the dialogue into log 
 			progress.present = true
+			# Create a new tab in logs if the npc don't have one already
+			if !get_node_or_null("Cluelist/LogContainer/" + progress.current_dialogue):
+				print(progress.current_dialogue + " tab created in logs")
+				
+				var newTab = VBoxContainer.new()
+				newTab.name = progress.current_dialogue
+				newTab.set("size_flags_horizontal", SIZE_EXPAND_FILL)
+				newTab.set("size_flags_vertical", SIZE_EXPAND_FILL)
+
+				var newRichLabel = RichTextLabel.new()
+				newRichLabel.set("size_flags_horizontal", SIZE_EXPAND_FILL)
+				newRichLabel.set("size_flags_vertical", SIZE_EXPAND_FILL)
+				newRichLabel.set("margin_left", 20)
+				newRichLabel.set("margin_top", 40)
+				newRichLabel.set("margin_right", -20)
+				newRichLabel.set("margin_bottom", -20)
+
+				newTab.add_child(newRichLabel)
+				$Cluelist/LogContainer.add_child(newTab)
 			# set the variable so later can be known what evidence to use
 			clue = selected
 			# start the dialog

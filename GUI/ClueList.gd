@@ -22,9 +22,11 @@ func _on_ItemList_item_selected(index):
 	
 	desc.set_bbcode(gui.cluelist[selected]["description"].c_unescape())
 	
-	for tab in $TabContainer.get_children():
+	for tab in $LogContainer.get_children():
 		if gui.cluelist[selected]["log"].has(tab.name):
-			$"TabContainer/Julia Fang/Log".set_bbcode(gui.cluelist[selected]["log"][tab.name].c_unescape())
+			tab.get_child(0).set_bbcode(gui.cluelist[selected]["log"][tab.name].c_unescape())
+		else:
+			tab.get_child(0).set_bbcode("")
 
 
 func _on_Cluelist_visibility_changed():

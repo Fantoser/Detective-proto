@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://GUI/Thought system/Tought system.gd" type="Script" id=1]
 [ext_resource path="res://GUI/Thought system/Butt.tscn" type="PackedScene" id=2]
@@ -8,6 +8,9 @@
 [ext_resource path="res://assets/Fonts/Outline_big.tres" type="DynamicFont" id=6]
 [ext_resource path="res://assets/Themes/wordtheme.tres" type="Theme" id=7]
 [ext_resource path="res://GUI/Thought system/wordlist.gd" type="Script" id=8]
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.6, 0.6, 0.6, 0 )
 
 [sub_resource type="RectangleShape2D" id=1]
 extents = Vector2( 32.0053, 31.9216 )
@@ -161,10 +164,12 @@ size_flags_horizontal = 3
 
 [node name="DescLabel" type="RichTextLabel" parent="."]
 margin_left = 458.0
-margin_top = 140.0
+margin_top = 139.056
 margin_right = 830.0
-margin_bottom = 311.0
+margin_bottom = 310.056
 theme = ExtResource( 4 )
+custom_styles/focus = SubResource( 6 )
+custom_styles/normal = SubResource( 6 )
 bbcode_enabled = true
 __meta__ = {
 "_edit_use_anchors_": false
